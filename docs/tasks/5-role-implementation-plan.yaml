@@ -1,0 +1,1032 @@
+# ============================================================
+# MULTI-TENANT 5-ROLE SYSTEM - IMPLEMENTATION PLAN
+# ============================================================
+# Created: 2025-10-15
+# Status: Ready for Implementation
+# Estimated Duration: 6-9 hours of development
+# ============================================================
+
+metadata:
+  version: "1.1"
+  author: "Claude Code"
+  created_date: "2025-10-15"
+  last_updated: "2025-10-15"
+  status: "READY_FOR_EXECUTION"
+  estimated_hours: "6-9"
+  changelog:
+    - "v1.1 - Removed migration script (data not deployed)"
+    - "v1.1 - Added shadcn agent workflow (research → implement)"
+    - "v1.1 - Added design token requirements"
+    - "v1.0 - Initial plan"
+
+# ============================================================
+# ROLE HIERARCHY DEFINITION
+# ============================================================
+role_hierarchy:
+  owner:
+    level: 1
+    description: "Super Admin - Manual creation only"
+    creation_method: "Manual Firestore edit after signup"
+    permissions:
+      - "All Admin permissions"
+      - "Transfer ownership"
+      - "Delete tenant"
+      - "Manage billing & subscription"
+      - "Cannot be demoted by anyone"
+
+  admin:
+    level: 2
+    description: "Tenant Administrator (current tenant_admin)"
+    creation_method: "First user signup OR invited by Owner"
+    permissions:
+      - "Invite/remove Member, Guest, Viewer"
+      - "Change roles (Member ↔ Guest ↔ Viewer only)"
+      - "Manage tenant settings"
+      - "Full business data CRUD"
+      - "Cannot invite/manage other Admins or Owners"
+
+  member:
+    level: 3
+    description: "Regular user (current user role)"
+    creation_method: "Invited by Admin"
+    permissions:
+      - "Full CRUD on business data"
+      - "Cannot manage users or settings"
+
+  guest:
+    level: 4
+    description: "Limited access user"
+    creation_method: "Invited by Admin"
+    permissions:
+      - "Resource-specific access only"
+      - "Perfect for contractors/clients"
+      - "Configurable per-resource permissions"
+
+  viewer:
+    level: 5
+    description: "Read-only user"
+    creation_method: "Invited by Admin"
+    permissions:
+      - "Read-only access to all data"
+      - "No creation/modification rights"
+      - "For reporting/auditing users"
+
+# ============================================================
+# IMPLEMENTATION PHASES WITH AGENT MAPPING
+# ============================================================
+
+phases:
+
+  # ----------------------------------------------------------
+  # PHASE 1: DATABASE SCHEMA UPDATES
+  # ----------------------------------------------------------
+  phase_1_schema:
+    name: "Database Schema Updates"
+    priority: "CRITICAL - MUST COMPLETE FIRST"
+    estimated_hours: "1 hour"
+    agent_assignment: "general-purpose"
+    note: "No migration script needed - data not deployed yet"
+
+    tasks:
+      - task_id: "1.1"
+        name: "Update Firestore Collections Schema"
+        agent: "general-purpose"
+        description: "Add new fields to support 5-role system"
+        files_to_modify:
+          - "firestore.rules (documentation comments)"
+        changes:
+          tenants_collection:
+            - field: "owner_id"
+              type: "string"
+              description: "UID of the Owner (cannot be changed by admins)"
+              required: true
+            - field: "created_by"
+              type: "string"
+              description: "First user who created tenant (becomes admin, not owner)"
+              existing: true
+
+          users_collection:
+            - field: "role"
+              type: "enum"
+              values: ["owner", "admin", "member", "guest", "viewer"]
+              description: "Updated from 'tenant_admin' | 'user'"
+              existing: true
+            - field: "resource_permissions"
+              type: "map"
+              description: "For guest role - specific resource access"
+              required_for: "guest role only"
+              example:
+                posts: ["post_id_1", "post_id_2"]
+                projects: ["project_id_5"]
+
+        acceptance_criteria:
+          - "tenants collection has owner_id field definition"
+          - "users.role enum expanded to 5 values"
+          - "resource_permissions map defined for guest access"
+
+      - task_id: "1.2"
+        name: "Update Firestore Indexes"
+        agent: "general-purpose"
+        description: "Add composite indexes for new role queries"
+        files_to_modify:
+          - "firestore.indexes.json"
+        new_indexes:
+          - collection: "users"
+            fields:
+              - field: "tenant_id"
+                order: "ASCENDING"
+              - field: "role"
+                order: "ASCENDING"
+              - field: "status"
+                order: "ASCENDING"
+
+        acceptance_criteria:
+          - "firestore.indexes.json updated with role-based queries"
+          - "Indexes deployed: firebase deploy --only firestore:indexes"
+
+  # ----------------------------------------------------------
+  # PHASE 2: CLOUD FUNCTIONS UPDATES
+  # ----------------------------------------------------------
+  phase_2_functions:
+    name: "Cloud Functions - 5-Role Support"
+    priority: "CRITICAL"
+    estimated_hours: "3-4 hours"
+    agent_assignment: "cloud-functions-defender"
+    dependencies:
+      - "phase_1_schema (must complete first)"
+
+    tasks:
+      - task_id: "2.1"
+        name: "Update onUserCreate.ts - Owner vs Admin Logic"
+        agent: "cloud-functions-defender"
+        file: "functions/src/auth/onUserCreate.ts"
+        changes:
+          - line: 56
+            from: "role = 'tenant_admin';"
+            to: "role = 'admin'; // First user becomes admin, NOT owner"
+          - add_logic: "Set tenant.created_by = uid (for future owner assignment)"
+          - comment: "Owner role ONLY assigned manually via Firestore by system admin"
+
+        security_validations:
+          - "NEVER auto-assign owner role on signup"
+          - "First user gets admin role (not owner)"
+          - "Tenant.owner_id remains null until manually set"
+
+        acceptance_criteria:
+          - "First signup creates admin (not owner)"
+          - "tenant.created_by field set correctly"
+          - "Custom claims set to { tenant_id, role: 'admin' }"
+
+      - task_id: "2.2"
+        name: "Update inviteUser.ts - 5-Role Support"
+        agent: "cloud-functions-defender"
+        file: "functions/src/auth/inviteUser.ts"
+        changes:
+          interface_update:
+            from: "role: 'tenant_admin' | 'user'"
+            to: "role: 'admin' | 'member' | 'guest' | 'viewer'"
+
+          add_permission_check:
+            - "Only admin can invite member, guest, viewer"
+            - "Only owner can invite admin"
+            - "Throw permission-denied if admin tries to invite admin"
+
+          add_guest_permissions:
+            - "If role === 'guest', require resource_permissions in data"
+            - "Validate resource_permissions format"
+            - "Store in invitation document"
+
+        new_validation_logic: |
+          if (data.role === 'admin') {
+            // Only owner can invite admin
+            const tenantDoc = await db.collection('tenants').doc(tenant_id).get();
+            if (tenantDoc.data()?.owner_id !== context.auth.uid) {
+              throw new functions.https.HttpsError(
+                'permission-denied',
+                'Only the Owner can invite Admins'
+              );
+            }
+          }
+
+          if (data.role === 'guest' && !data.resource_permissions) {
+            throw new functions.https.HttpsError(
+              'invalid-argument',
+              'Guest role requires resource_permissions'
+            );
+          }
+
+        acceptance_criteria:
+          - "Admin can invite member, guest, viewer"
+          - "Admin CANNOT invite admin (permission-denied)"
+          - "Owner can invite admin"
+          - "Guest invitation requires resource_permissions"
+
+      - task_id: "2.3"
+        name: "Update updateUserRole.ts - Role Hierarchy Enforcement"
+        agent: "cloud-functions-defender"
+        file: "functions/src/auth/updateUserRole.ts"
+        changes:
+          interface_update:
+            from: "new_role: 'tenant_admin' | 'user'"
+            to: "new_role: 'owner' | 'admin' | 'member' | 'guest' | 'viewer'"
+
+          add_owner_protection:
+            - "NEVER allow changing owner role (throw error)"
+            - "NEVER allow demoting owner to any other role"
+            - "NEVER allow promoting anyone to owner (use transferOwnership instead)"
+
+          add_admin_restrictions:
+            - "Admin can only change: member ↔ guest ↔ viewer"
+            - "Admin CANNOT change admin → member (permission-denied)"
+            - "Admin CANNOT promote member → admin (permission-denied)"
+
+          add_owner_permissions:
+            - "Owner can change: admin ↔ member ↔ guest ↔ viewer"
+            - "Owner CANNOT change their own role"
+
+        new_validation_logic: |
+          // Get tenant to check if user is owner
+          const tenantDoc = await db.collection('tenants').doc(caller_tenant_id).get();
+          const isOwner = tenantDoc.data()?.owner_id === context.auth.uid;
+          const isAdmin = context.auth.token.role === 'admin';
+
+          // Protect owner role
+          if (userDoc.data()!.role === 'owner') {
+            throw new functions.https.HttpsError(
+              'permission-denied',
+              'Cannot change Owner role. Use transferOwnership function.'
+            );
+          }
+
+          // Prevent promotion to owner via this function
+          if (new_role === 'owner') {
+            throw new functions.https.HttpsError(
+              'permission-denied',
+              'Cannot promote to Owner. Use transferOwnership function.'
+            );
+          }
+
+          // Admin role change restrictions
+          if (new_role === 'admin' && !isOwner) {
+            throw new functions.https.HttpsError(
+              'permission-denied',
+              'Only Owner can promote users to Admin'
+            );
+          }
+
+          if (userDoc.data()!.role === 'admin' && !isOwner) {
+            throw new functions.https.HttpsError(
+              'permission-denied',
+              'Only Owner can demote Admins'
+            );
+          }
+
+        acceptance_criteria:
+          - "Owner role cannot be changed (protected)"
+          - "Admin can change member ↔ guest ↔ viewer"
+          - "Admin CANNOT change admin roles"
+          - "Owner can change any role except owner"
+
+      - task_id: "2.4"
+        name: "Create transferOwnership.ts - Owner-Only Function"
+        agent: "cloud-functions-defender"
+        create_file: "functions/src/auth/transferOwnership.ts"
+        description: "Allow owner to transfer ownership to an admin"
+        function_signature: |
+          interface TransferOwnershipData {
+            new_owner_uid: string; // Must be existing admin in tenant
+          }
+
+          export const transferOwnership = functions.https.onCall(
+            async (data: TransferOwnershipData, context) => {
+              // Implementation
+            }
+          );
+
+        security_requirements:
+          - "Only current owner can call this function"
+          - "new_owner_uid must be existing user in same tenant"
+          - "new_owner_uid must have role='admin'"
+          - "Update tenant.owner_id"
+          - "Update new_owner custom claims to role='owner'"
+          - "Update old_owner custom claims to role='admin'"
+          - "Update both user documents in Firestore"
+          - "Create audit log with old/new owner UIDs"
+
+        implementation_steps:
+          - "Verify caller is current owner"
+          - "Verify new_owner exists and is admin in same tenant"
+          - "Update tenant.owner_id = new_owner_uid"
+          - "Set custom claims for new owner: { role: 'owner' }"
+          - "Set custom claims for old owner: { role: 'admin' }"
+          - "Update Firestore users collection for both users"
+          - "Create audit log"
+
+        acceptance_criteria:
+          - "transferOwnership.ts created in functions/src/auth/"
+          - "Only owner can transfer ownership"
+          - "New owner must be existing admin"
+          - "Both custom claims and Firestore updated"
+          - "Audit log created"
+
+      - task_id: "2.5"
+        name: "Create updateGuestPermissions.ts - Resource Access Control"
+        agent: "cloud-functions-defender"
+        create_file: "functions/src/auth/updateGuestPermissions.ts"
+        description: "Allow admin to update resource_permissions for guest users"
+        function_signature: |
+          interface UpdateGuestPermissionsData {
+            user_id: string;
+            resource_permissions: {
+              [collection: string]: string[]; // collection -> document IDs
+            };
+          }
+
+          export const updateGuestPermissions = functions.https.onCall(
+            async (data: UpdateGuestPermissionsData, context) => {
+              // Implementation
+            }
+          );
+
+        security_requirements:
+          - "Only admin or owner can call this"
+          - "Target user must have role='guest'"
+          - "Validate resource_permissions structure"
+          - "Update user document in Firestore"
+          - "Create audit log"
+
+        acceptance_criteria:
+          - "updateGuestPermissions.ts created"
+          - "Admin/Owner can update guest permissions"
+          - "Non-guest users rejected"
+          - "Audit log created"
+
+      - task_id: "2.6"
+        name: "Export New Functions in index.ts"
+        agent: "cloud-functions-defender"
+        file: "functions/src/index.ts"
+        changes:
+          - "Export transferOwnership from ./auth/transferOwnership"
+          - "Export updateGuestPermissions from ./auth/updateGuestPermissions"
+
+        acceptance_criteria:
+          - "Both new functions exported in index.ts"
+          - "Functions build without TypeScript errors"
+
+  # ----------------------------------------------------------
+  # PHASE 3: FIRESTORE SECURITY RULES
+  # ----------------------------------------------------------
+  phase_3_rules:
+    name: "Firestore Security Rules - 5-Role Enforcement"
+    priority: "CRITICAL"
+    estimated_hours: "1-2 hours"
+    agent_assignment: "firebase-config-guardian"
+    dependencies:
+      - "phase_2_functions (functions must be updated first)"
+
+    tasks:
+      - task_id: "3.1"
+        name: "Add Role Helper Functions"
+        agent: "firebase-config-guardian"
+        file: "firestore.rules"
+        changes:
+          add_helpers: |
+            function isOwner() {
+              return request.auth != null
+                && request.auth.token.role == 'owner';
+            }
+
+            function isAdmin() {
+              return request.auth != null
+                && request.auth.token.role == 'admin';
+            }
+
+            function isMember() {
+              return request.auth != null
+                && request.auth.token.role == 'member';
+            }
+
+            function isGuest() {
+              return request.auth != null
+                && request.auth.token.role == 'guest';
+            }
+
+            function isViewer() {
+              return request.auth != null
+                && request.auth.token.role == 'viewer';
+            }
+
+            function canManageUsers() {
+              return isOwner() || isAdmin();
+            }
+
+            function canEditData() {
+              return isOwner() || isAdmin() || isMember();
+            }
+
+            function hasResourceAccess(collection, docId) {
+              return isGuest()
+                && request.auth.token.resource_permissions != null
+                && request.auth.token.resource_permissions[collection] != null
+                && docId in request.auth.token.resource_permissions[collection];
+            }
+
+        acceptance_criteria:
+          - "All 5 role helper functions added"
+          - "canManageUsers() and canEditData() helpers added"
+          - "hasResourceAccess() for guest permissions added"
+
+      - task_id: "3.2"
+        name: "Update Tenants Collection Rules"
+        agent: "firebase-config-guardian"
+        file: "firestore.rules"
+        section: "match /tenants/{tenantId}"
+        changes:
+          read_rule: "Same (all tenant members can read)"
+          update_rule: |
+            allow update: if isAuthenticated()
+              && getTenantId() == tenantId
+              && (isOwner() || isAdmin()) // Owner or Admin can update settings
+              && request.resource.data.created_by == resource.data.created_by
+              && request.resource.data.owner_id == resource.data.owner_id; // Prevent owner_id tampering
+
+          add_owner_only_fields: |
+            // Only owner can update billing/subscription
+            // (implement via Cloud Function, not direct Firestore write)
+
+        acceptance_criteria:
+          - "Tenants update requires owner or admin"
+          - "owner_id field cannot be tampered via update"
+
+      - task_id: "3.3"
+        name: "Update Users Collection Rules"
+        agent: "firebase-config-guardian"
+        file: "firestore.rules"
+        section: "match /users/{userId}"
+        changes:
+          read_rule: "Same (all tenant members can read)"
+          update_rule: |
+            allow update: if isAuthenticated()
+              && belongsToTenant(resource.data.tenant_id)
+              && belongsToTenant(request.resource.data.tenant_id)
+              && (
+                request.auth.uid == userId  // Users can update own profile
+                || canManageUsers()         // Owner/Admin can update others
+              )
+              && request.resource.data.role == resource.data.role; // Role changes via Cloud Function only
+
+        acceptance_criteria:
+          - "User profile updates allowed for self or admin/owner"
+          - "Role field cannot be changed via direct update"
+
+      - task_id: "3.4"
+        name: "Update Business Data Rules (posts, etc.)"
+        agent: "firebase-config-guardian"
+        file: "firestore.rules"
+        section: "match /posts/{postId}"
+        changes:
+          read_rule: |
+            allow read: if isAuthenticated()
+              && belongsToTenant(resource.data.tenant_id)
+              && (
+                canEditData()  // Owner, Admin, Member can read all
+                || isViewer()  // Viewer can read all
+                || hasResourceAccess('posts', postId)  // Guest can read if permitted
+              );
+
+          create_rule: |
+            allow create: if isAuthenticated()
+              && request.resource.data.tenant_id == getTenantId()
+              && request.resource.data.created_by == request.auth.uid
+              && canEditData();  // Only Owner, Admin, Member can create
+
+          update_rule: |
+            allow update: if isAuthenticated()
+              && belongsToTenant(resource.data.tenant_id)
+              && belongsToTenant(request.resource.data.tenant_id)
+              && canEditData()  // Only Owner, Admin, Member can update
+              && (resource.data.created_by == request.auth.uid || canManageUsers());
+
+          delete_rule: |
+            allow delete: if isAuthenticated()
+              && belongsToTenant(resource.data.tenant_id)
+              && canEditData()  // Only Owner, Admin, Member can delete
+              && (resource.data.created_by == request.auth.uid || canManageUsers());
+
+        acceptance_criteria:
+          - "Viewer has read-only access"
+          - "Guest has resource-specific read access"
+          - "Only Owner/Admin/Member can create/update/delete"
+
+  # ----------------------------------------------------------
+  # PHASE 4: USER MANAGEMENT DASHBOARD (FRONTEND)
+  # ----------------------------------------------------------
+  phase_4_frontend:
+    name: "User Management Dashboard - Admin UI"
+    priority: "HIGH"
+    estimated_hours: "3-4 hours"
+    agent_assignment: "frontend-security-enforcer + shadcn agents"
+    design_system: "Use existing design tokens from src/styles/globals.css"
+    reuse_components: "Leverage existing shadcn components (Button, Card, Input, Table, etc.)"
+    dependencies:
+      - "phase_2_functions"
+      - "phase_3_rules"
+
+    tasks:
+      - task_id: "4.1"
+        name: "Research Required shadcn Components"
+        agent: "shadcn-component-researcher"
+        description: "Identify shadcn components needed for user management UI"
+        components_needed:
+          - "table - User list with sorting/filtering"
+          - "badge - Role badges (owner/admin/member/guest/viewer)"
+          - "select - Role selector dropdown"
+          - "dropdown-menu - Actions menu (change role, remove user)"
+          - "dialog - Confirmation dialogs (remove user, transfer ownership)"
+          - "form - Invite user form with validation"
+          - "input - Email input for invitations"
+          - "alert - Success/error messages"
+          - "card - Container for invite form"
+
+        research_output: "docs/tasks/shadcn-user-management-components.md"
+
+        acceptance_criteria:
+          - "All required components researched"
+          - "Installation commands documented"
+          - "Component APIs and examples gathered"
+
+      - task_id: "4.2"
+        name: "Create Role-Based UI Components (Using Design Tokens)"
+        agent: "frontend-security-enforcer"
+        create_files:
+          - "src/components/auth/RoleGuard.tsx"
+          - "src/components/users/RoleBadge.tsx"
+
+        design_requirements:
+          - "Use CSS variables from globals.css (no hardcoded colors)"
+          - "Use existing shadcn Badge component as base"
+          - "Follow accessibility patterns from AuthAlert/AuthCard"
+          - "Reuse existing token system for consistency"
+
+        RoleGuard_component: |
+          'use client';
+          // Simple permission guard - reuses pattern from ProtectedRoute
+          interface RoleGuardProps {
+            children: React.ReactNode;
+            allowedRoles: ('owner' | 'admin' | 'member' | 'guest' | 'viewer')[];
+            fallback?: React.ReactNode;
+          }
+
+          export function RoleGuard({ children, allowedRoles, fallback }: RoleGuardProps) {
+            // Implementation uses getCurrentSession from DAL
+          }
+
+        RoleBadge_component: |
+          // Uses shadcn Badge component + design tokens
+          import { Badge } from '@/components/ui/badge';
+
+          interface RoleBadgeProps {
+            role: 'owner' | 'admin' | 'member' | 'guest' | 'viewer';
+          }
+
+          export function RoleBadge({ role }: RoleBadgeProps) {
+            // Use design tokens instead of hardcoded colors:
+            // owner: --primary (purple/blue)
+            // admin: --secondary (blue)
+            // member: --success (green)
+            // guest: --warning (yellow)
+            // viewer: --muted (gray)
+          }
+
+        acceptance_criteria:
+          - "RoleGuard uses server session from DAL"
+          - "RoleBadge uses shadcn Badge + design tokens"
+          - "No hardcoded colors (uses CSS variables)"
+          - "Consistent with existing auth components"
+
+      - task_id: "4.3"
+        name: "Build User Management Dashboard with shadcn"
+        agent: "shadcn-implementation-builder"
+        description: "Build complete user management page using researched shadcn components"
+        create_files:
+          - "src/app/(protected)/users/page.tsx"
+          - "src/components/users/InviteUserForm.tsx"
+          - "src/components/users/UserTable.tsx"
+          - "src/components/users/UserActionsMenu.tsx"
+
+        implementation_requirements:
+          design_tokens:
+            - "Use --spacing-* tokens for margins/padding"
+            - "Use --shadow-* tokens for card shadows"
+            - "Use --transition-* for animations"
+            - "Use --radius for rounded corners"
+            - "Use --primary, --secondary, --success, --warning, --muted for role badge colors"
+
+          shadcn_components_to_use:
+            - "Card - Wrap invite form and user table"
+            - "Table - Display users list"
+            - "Badge - Role badges with design token colors"
+            - "Select - Role selector in invite form"
+            - "DropdownMenu - Actions menu (change role, remove)"
+            - "Dialog - Confirmation dialogs"
+            - "Form - Invite form with Zod validation"
+            - "Input - Email input (reuse AuthField pattern)"
+            - "Button - Submit buttons (reuse AuthButton pattern)"
+            - "Alert - Success/error messages (reuse AuthAlert)"
+
+          reuse_patterns:
+            - "Follow AuthCard layout pattern for invite form"
+            - "Reuse AuthField for email input"
+            - "Reuse AuthButton for submit button"
+            - "Reuse AuthAlert for success/error messages"
+            - "Follow accessibility patterns (ARIA labels, keyboard nav)"
+
+          page_structure: |
+            // Server Component
+            export default async function UsersPage() {
+              const session = await getCurrentSession();
+              const tenantDB = new TenantFirestore(session.tenant_id, session.user_id);
+              const users = await tenantDB.query('users', [
+                { field: 'status', op: '==', value: 'active' }
+              ]);
+
+              return (
+                <RoleGuard allowedRoles={['owner', 'admin']}>
+                  <div className="container mx-auto" style={{ padding: 'var(--spacing-lg)' }}>
+                    <h1 style={{ fontSize: '1.5rem', marginBottom: 'var(--spacing-md)' }}>
+                      User Management
+                    </h1>
+
+                    <InviteUserForm userRole={session.role} />
+                    <UserTable users={users} currentUserRole={session.role} />
+                  </div>
+                </RoleGuard>
+              );
+            }
+
+        acceptance_criteria:
+          - "All components use shadcn base components"
+          - "All styling uses design tokens (no hardcoded values)"
+          - "Follows existing auth component patterns"
+          - "TypeScript with proper types"
+          - "Zod validation for invite form"
+          - "Accessible (WCAG AA compliant)"
+          - "Responsive layout"
+
+      - task_id: "4.4"
+        name: "Create Client-Side Function Callers"
+        agent: "frontend-security-enforcer"
+        create_file: "src/lib/functions/user-management.ts"
+        description: "Wrapper functions for calling Cloud Functions from client"
+
+        function_wrappers: |
+          import { getFunctions, httpsCallable } from 'firebase/functions';
+
+          const functions = getFunctions();
+
+          export async function inviteUser(
+            email: string,
+            role: string,
+            resourcePermissions?: Record<string, string[]>
+          ) {
+            const inviteUserFn = httpsCallable(functions, 'inviteUser');
+            return inviteUserFn({ email, role, resource_permissions: resourcePermissions });
+          }
+
+          export async function updateUserRole(userId: string, newRole: string) {
+            const updateRoleFn = httpsCallable(functions, 'updateUserRole');
+            return updateRoleFn({ user_id: userId, new_role: newRole });
+          }
+
+          export async function deleteUser(userId: string) {
+            const deleteUserFn = httpsCallable(functions, 'deleteUserFromTenant');
+            return deleteUserFn({ user_id: userId });
+          }
+
+          export async function transferOwnership(newOwnerUid: string) {
+            const transferFn = httpsCallable(functions, 'transferOwnership');
+            return transferFn({ new_owner_uid: newOwnerUid });
+          }
+
+          export async function updateGuestPermissions(
+            userId: string,
+            resourcePermissions: Record<string, string[]>
+          ) {
+            const updatePermsFn = httpsCallable(functions, 'updateGuestPermissions');
+            return updatePermsFn({ user_id: userId, resource_permissions: resourcePermissions });
+          }
+
+        acceptance_criteria:
+          - "All 5 function wrappers created"
+          - "TypeScript types defined"
+          - "Error handling included"
+
+  # ----------------------------------------------------------
+  # PHASE 5: TESTING & DOCUMENTATION
+  # ----------------------------------------------------------
+  phase_5_testing:
+    name: "Testing & Documentation"
+    priority: "MEDIUM"
+    estimated_hours: "1-2 hours"
+    agent_assignment: "general-purpose"
+    dependencies:
+      - "All previous phases"
+
+    tasks:
+      - task_id: "5.1"
+        name: "Update CLAUDE.md Documentation"
+        agent: "general-purpose"
+        file: "CLAUDE.md"
+        changes:
+          - "Update role hierarchy section (2 roles → 5 roles)"
+          - "Document owner creation process (manual)"
+          - "Update Cloud Functions section with new functions"
+          - "Add user management dashboard section"
+          - "Update security rules examples"
+
+        acceptance_criteria:
+          - "CLAUDE.md reflects 5-role system"
+          - "Owner creation documented"
+          - "New functions documented"
+
+      - task_id: "5.2"
+        name: "Create User Management Guide"
+        agent: "general-purpose"
+        create_file: "docs/user-management-guide.md"
+        content_sections:
+          - "5-Role Hierarchy Overview"
+          - "Creating an Owner (Manual Process)"
+          - "Inviting Users (Admin Function)"
+          - "Managing User Roles"
+          - "Guest Resource Permissions"
+          - "Transferring Ownership"
+          - "Security Best Practices"
+
+        acceptance_criteria:
+          - "Comprehensive user management guide created"
+          - "Screenshots/examples included"
+
+      - task_id: "5.3"
+        name: "Create Testing Checklist"
+        agent: "general-purpose"
+        create_file: "docs/tasks/5-role-testing-checklist.md"
+
+        test_scenarios:
+          owner_tests:
+            - "Owner can invite admin"
+            - "Owner can change admin → member"
+            - "Owner can transfer ownership to admin"
+            - "Owner cannot demote themselves"
+
+          admin_tests:
+            - "Admin can invite member, guest, viewer"
+            - "Admin CANNOT invite admin (permission-denied)"
+            - "Admin can change member ↔ guest ↔ viewer"
+            - "Admin CANNOT change admin roles"
+
+          member_tests:
+            - "Member can CRUD business data"
+            - "Member CANNOT access user management page"
+
+          guest_tests:
+            - "Guest can only access permitted resources"
+            - "Guest CANNOT access non-permitted resources"
+
+          viewer_tests:
+            - "Viewer has read-only access"
+            - "Viewer CANNOT create/update/delete data"
+
+          cross_tenant_tests:
+            - "User in Tenant A cannot see Tenant B data"
+            - "Role changes isolated to tenant"
+
+        acceptance_criteria:
+          - "Testing checklist created with all scenarios"
+          - "Manual testing completed"
+          - "All tests passing"
+
+# ============================================================
+# EXECUTION SEQUENCE & DEPENDENCIES
+# ============================================================
+execution_order:
+  step_1:
+    phase: "phase_1_schema"
+    must_complete_before: ["phase_2_functions", "phase_3_rules"]
+    blocking: true
+
+  step_2:
+    phase: "phase_2_functions"
+    must_complete_before: ["phase_3_rules", "phase_4_frontend"]
+    blocking: true
+
+  step_3:
+    phase: "phase_3_rules"
+    must_complete_before: ["phase_4_frontend"]
+    blocking: true
+
+  step_4:
+    phase: "phase_4_frontend"
+    can_start_after: ["phase_2_functions", "phase_3_rules"]
+    blocking: false
+
+  step_5:
+    phase: "phase_5_testing"
+    can_start_after: ["phase_4_frontend"]
+    blocking: false
+
+# ============================================================
+# CHECKPOINT TRACKING
+# ============================================================
+checkpoints:
+  - id: "checkpoint_1"
+    name: "Schema Migration Complete"
+    completed: false
+    verification:
+      - "firestore.indexes.json updated"
+      - "Migration script created"
+      - "Indexes deployed"
+
+  - id: "checkpoint_2"
+    name: "Cloud Functions Updated"
+    completed: false
+    verification:
+      - "All 6 functions updated/created"
+      - "Functions build successfully"
+      - "Functions deployed to Firebase"
+
+  - id: "checkpoint_3"
+    name: "Security Rules Updated"
+    completed: false
+    verification:
+      - "All role helpers added"
+      - "Collection rules updated"
+      - "Rules deployed to Firebase"
+
+  - id: "checkpoint_4"
+    name: "User Management Dashboard Complete"
+    completed: false
+    verification:
+      - "/users page created"
+      - "InviteUserForm working"
+      - "UserTable functional"
+
+  - id: "checkpoint_5"
+    name: "Testing & Documentation Complete"
+    completed: false
+    verification:
+      - "All test scenarios passing"
+      - "Documentation updated"
+      - "User guide created"
+
+# ============================================================
+# AGENT SPECIALIZATION MAPPING
+# ============================================================
+agent_assignments:
+  cloud-functions-defender:
+    reason: "Handles Cloud Functions security, BOLA protection, tenant validation"
+    phases: ["phase_2_functions"]
+    tasks: ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6"]
+    expertise:
+      - "Server-side logic enforcement"
+      - "Custom claims management"
+      - "Rate limiting integration"
+      - "Audit logging"
+
+  firebase-config-guardian:
+    reason: "Validates Firestore security rules, enforces role-based access"
+    phases: ["phase_3_rules"]
+    tasks: ["3.1", "3.2", "3.3", "3.4"]
+    expertise:
+      - "Security rules validation"
+      - "Tenant isolation enforcement"
+      - "Role-based access control"
+
+  shadcn-component-researcher:
+    reason: "Researches shadcn/ui components for user management UI"
+    phases: ["phase_4_frontend"]
+    tasks: ["4.1"]
+    expertise:
+      - "shadcn component discovery"
+      - "Component API documentation"
+      - "Installation and usage patterns"
+
+  frontend-security-enforcer:
+    reason: "Implements secure UI components with design tokens"
+    phases: ["phase_4_frontend"]
+    tasks: ["4.2", "4.4"]
+    expertise:
+      - "React component security"
+      - "Client-side authorization"
+      - "Design token integration"
+      - "Secure form handling"
+
+  shadcn-implementation-builder:
+    reason: "Builds production-ready UI using shadcn components and design tokens"
+    phases: ["phase_4_frontend"]
+    tasks: ["4.3"]
+    expertise:
+      - "shadcn component implementation"
+      - "TypeScript with Zod validation"
+      - "Accessibility compliance"
+      - "Design token usage"
+
+  general-purpose:
+    reason: "Handles schema updates, documentation (no migration needed)"
+    phases: ["phase_1_schema", "phase_5_testing"]
+    tasks: ["1.1", "1.2", "5.1", "5.2", "5.3"]
+    expertise:
+      - "Database schema design"
+      - "Firestore indexes"
+      - "Documentation updates"
+    note: "No migration script - data not deployed yet"
+
+# ============================================================
+# RISK MITIGATION
+# ============================================================
+risks:
+  - risk: "Owner lockout (owner demotes themselves)"
+    mitigation: "Prevent owner role changes in updateUserRole, use transferOwnership only"
+    severity: "CRITICAL"
+
+  - risk: "Cross-tenant data leak with new roles"
+    mitigation: "Security rules enforce tenant_id checks on all operations"
+    severity: "CRITICAL"
+
+  - risk: "Admin escalates to owner via updateUserRole"
+    mitigation: "Explicitly block owner promotion in updateUserRole, use transferOwnership"
+    severity: "HIGH"
+
+  - risk: "Hardcoded colors break design system"
+    mitigation: "All components use design tokens from globals.css, no hardcoded values"
+    severity: "MEDIUM"
+
+# ============================================================
+# DEPLOYMENT CHECKLIST
+# ============================================================
+deployment_steps:
+  pre_deployment:
+    - "Test all Cloud Functions in emulator"
+    - "Validate security rules with emulator"
+    - "Test user management UI in development"
+
+  deployment:
+    - "Deploy Firestore indexes: firebase deploy --only firestore:indexes"
+    - "Deploy security rules: firebase deploy --only firestore:rules"
+    - "Build functions: cd functions && npm run build"
+    - "Deploy functions: firebase deploy --only functions"
+    - "Deploy Next.js app: npm run build && vercel deploy"
+
+  post_deployment:
+    - "Verify first user signup gets admin role (not owner)"
+    - "Manually assign owner_id in Firestore for designated owner"
+    - "Test admin user management page"
+    - "Test all 5 roles with different users"
+    - "Verify cross-tenant isolation"
+    - "Verify design tokens working (rebrand test)"
+
+# ============================================================
+# SUCCESS CRITERIA
+# ============================================================
+success_metrics:
+  functionality:
+    - "✅ Owner can transfer ownership"
+    - "✅ Admin can invite member/guest/viewer"
+    - "✅ Admin CANNOT invite admin"
+    - "✅ Guest has resource-specific access"
+    - "✅ Viewer has read-only access"
+    - "✅ All roles isolated by tenant_id"
+
+  security:
+    - "✅ Owner role cannot be changed except via transferOwnership"
+    - "✅ Admin cannot escalate privileges"
+    - "✅ Cross-tenant operations blocked"
+    - "✅ Role changes audited"
+
+  user_experience:
+    - "✅ User management dashboard intuitive"
+    - "✅ Role badges clearly visible"
+    - "✅ Permissions enforced in UI (disabled buttons)"
+    - "✅ Error messages helpful"
+
+  design_system:
+    - "✅ All components use design tokens (no hardcoded colors)"
+    - "✅ Consistent with existing auth components"
+    - "✅ Rebrand possible by editing globals.css only"
+    - "✅ Accessible (WCAG AA compliant)"
+
+# ============================================================
+# NOTES
+# ============================================================
+notes:
+  - "NO MIGRATION SCRIPT NEEDED - Data not deployed yet"
+  - "Owner role is NEVER auto-assigned on signup"
+  - "First user gets admin role (not owner)"
+  - "You manually assign owner_id in Firestore console"
+  - "Admin can only invite lower-level roles (member, guest, viewer)"
+  - "transferOwnership is the ONLY way to change owner"
+  - "Guest role requires resource_permissions map"
+  - "All role changes must update BOTH custom claims AND Firestore"
+  - "ALL UI components MUST use design tokens from globals.css"
+  - "NO hardcoded colors - use CSS variables only"
+  - "Reuse existing auth component patterns (AuthCard, AuthField, etc.)"
+  - "shadcn components researched BEFORE implementation"

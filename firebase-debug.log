@@ -1,0 +1,751 @@
+[debug] [2025-10-15T10:27:16.821Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.824Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.824Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T10:27:16.826Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T10:27:16.826Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:16.875Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.875Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.876Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T10:27:16.876Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T10:27:16.876Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:16.878Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.878Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.879Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T10:27:16.879Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T10:27:16.879Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:16.880Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.880Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.881Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T10:27:16.881Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T10:27:16.881Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:16.882Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.882Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.882Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T10:27:16.882Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T10:27:16.882Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:16.884Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.884Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.884Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T10:27:16.884Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T10:27:16.884Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:16.886Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.886Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.886Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T10:27:16.886Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T10:27:16.886Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:16.888Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.890Z] Checked if tokens are valid: false, expires at: 1760504605971
+[debug] [2025-10-15T10:27:16.890Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T10:27:16.890Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T10:27:16.890Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.100Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T10:27:17.100Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.108Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-15T10:27:17.109Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T10:27:17.110Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T10:27:17.110Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.116Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [none]
+[debug] [2025-10-15T10:27:17.116Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T10:27:17.118Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T10:27:17.118Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.123Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [none]
+[debug] [2025-10-15T10:27:17.124Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T10:27:17.125Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T10:27:17.125Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.132Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-15T10:27:17.132Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T10:27:17.133Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T10:27:17.133Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.139Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [none]
+[debug] [2025-10-15T10:27:17.139Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T10:27:17.140Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T10:27:17.140Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.148Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [none]
+[debug] [2025-10-15T10:27:17.148Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T10:27:17.149Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T10:27:17.149Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.156Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-10-15T10:27:17.157Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T10:27:17.158Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T10:27:17.158Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T10:27:17.164Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [none]
+[debug] [2025-10-15T10:27:17.164Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T10:27:18.948Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com 403
+[debug] [2025-10-15T10:27:18.948Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [omitted]
+[debug] [2025-10-15T10:27:18.955Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com 403
+[debug] [2025-10-15T10:27:18.955Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [omitted]
+[debug] [2025-10-15T10:27:19.052Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com 403
+[debug] [2025-10-15T10:27:19.052Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-15T10:27:19.053Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ 403
+[debug] [2025-10-15T10:27:19.053Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [omitted]
+[debug] [2025-10-15T10:27:19.058Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com 403
+[debug] [2025-10-15T10:27:19.058Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-10-15T10:27:19.059Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com 403
+[debug] [2025-10-15T10:27:19.060Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [omitted]
+[debug] [2025-10-15T10:27:19.060Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com 403
+[debug] [2025-10-15T10:27:19.060Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-10-15T10:27:19.060Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com 403
+[debug] [2025-10-15T10:27:19.060Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:09.111Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.115Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.116Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.119Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.119Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.180Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.181Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.181Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.183Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.184Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.188Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.188Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.188Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.188Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.189Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.190Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.191Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.191Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.191Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.191Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.193Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.193Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.193Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.193Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.193Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.195Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.195Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.195Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.196Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.196Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.199Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.199Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.199Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.199Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.199Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.201Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.201Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.201Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.202Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.202Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.097Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.262Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.262Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.262Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.263Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.263Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.267Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.267Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.267Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.267Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.267Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.269Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.270Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.270Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.270Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.270Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.272Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.272Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.272Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.273Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.273Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.275Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.275Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.275Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.275Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.275Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.278Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.278Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.279Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.279Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.279Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.280Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.280Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.280Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.281Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.281Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.283Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.283Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.283Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.283Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.283Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.285Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.286Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.286Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.287Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.287Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.288Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.288Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.288Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.289Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.289Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.290Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.291Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.291Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.291Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.291Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.292Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.293Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.293Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.293Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.293Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.294Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.294Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.294Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.295Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.295Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.296Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.296Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.296Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.296Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.297Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.298Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.298Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.298Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.298Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.299Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.300Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.300Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.300Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.301Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.301Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.102Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.102Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.105Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.105Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.163Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.163Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.163Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.164Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.164Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.167Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.167Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.167Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.168Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.168Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.169Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.169Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.170Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.170Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.170Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.172Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.172Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.172Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.172Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.172Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.175Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.175Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.175Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.178Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.179Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.181Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.181Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.181Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.182Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.182Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.186Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.186Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.186Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.188Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.188Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.267Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.267Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.268Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.268Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.268Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.271Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.271Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.271Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.271Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.271Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.273Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.273Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.273Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.274Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.274Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.275Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.275Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.275Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.275Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.275Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.281Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.283Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.283Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.283Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.283Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.285Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.286Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.286Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.286Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.286Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.288Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.288Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.288Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.288Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.288Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.294Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.294Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.294Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.294Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.294Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.296Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.296Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.296Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.296Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.297Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.298Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.299Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.299Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.300Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.301Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.303Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.303Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.303Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.303Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.303Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.305Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.305Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.306Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.306Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.306Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.307Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.307Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.308Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.308Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.308Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.310Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.310Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.310Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.310Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.310Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.311Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.312Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.312Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.312Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.312Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.313Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.314Z] Checked if tokens are valid: false, expires at: 1760527636158
+[debug] [2025-10-15T11:32:09.314Z] > refreshing access token with scopes: []
+[debug] [2025-10-15T11:32:09.314Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-15T11:32:09.314Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.475Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.476Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.489Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [none]
+[debug] [2025-10-15T11:32:09.489Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.492Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.492Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.508Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.508Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.512Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.513Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.521Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.521Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.535Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.542Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.535Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.545Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.545Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.562Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.542Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.578Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.578Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.597Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.562Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.570Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.570Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.571Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.572Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.592Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.593Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.594Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.594Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.601Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.602Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.609Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.609Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.597Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.614Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.617Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.622Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.626Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.622Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.646Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [none]
+[debug] [2025-10-15T11:32:09.646Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.626Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.635Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.635Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.645Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.645Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.647Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.647Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.671Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.671Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.683Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.683Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.661Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.661Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.683Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.683Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.684Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.684Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.687Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.687Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.705Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.705Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.707Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.707Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.716Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.716Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.718Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.718Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.727Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.727Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.730Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.730Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.689Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.690Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.727Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.727Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.758Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.758Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.762Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.762Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.767Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.767Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.771Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.771Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.738Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.738Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.743Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.743Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.781Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [none]
+[debug] [2025-10-15T11:32:09.781Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.785Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.785Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.794Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.794Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.796Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.796Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.801Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.801Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.806Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.806Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.813Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.813Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.822Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.823Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.825Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.825Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.846Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.847Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.788Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.794Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.826Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.826Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.828Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.828Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.833Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.833Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-10-15T11:32:09.839Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.839Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.855Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.855Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.856Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.856Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.873Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.873Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.881Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.881Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.888Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [none]
+[debug] [2025-10-15T11:32:09.889Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.891Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.892Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.903Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.904Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.923Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.923Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.930Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.930Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.932Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.932Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.939Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [none]
+[debug] [2025-10-15T11:32:09.940Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.950Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.950Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.958Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [none]
+[debug] [2025-10-15T11:32:09.958Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:09.962Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-15T11:32:09.962Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-15T11:32:09.973Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [none]
+[debug] [2025-10-15T11:32:09.973Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:11.415Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ 403
+[debug] [2025-10-15T11:32:11.415Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [omitted]
+[debug] [2025-10-15T11:32:11.506Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com 403
+[debug] [2025-10-15T11:32:11.506Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:11.507Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com 403
+[debug] [2025-10-15T11:32:11.507Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:11.509Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com 403
+[debug] [2025-10-15T11:32:11.510Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com 403
+[debug] [2025-10-15T11:32:11.509Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:11.510Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:11.511Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com 403
+[debug] [2025-10-15T11:32:11.511Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:11.637Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com 403
+[debug] [2025-10-15T11:32:11.637Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [omitted]
+[debug] [2025-10-15T11:32:11.708Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com 403
+[debug] [2025-10-15T11:32:11.708Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:12.380Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-15T11:32:12.381Z] > authorizing via signed-in user (singh.chana02@gmail.com)
+[debug] [2025-10-15T11:32:12.390Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-15T11:32:12.390Z] > authorizing via signed-in user (singh.chana02@gmail.com)
+[debug] [2025-10-15T11:32:12.409Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-15T11:32:12.409Z] > authorizing via signed-in user (singh.chana02@gmail.com)
+[debug] [2025-10-15T11:32:12.427Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-15T11:32:12.428Z] > authorizing via signed-in user (singh.chana02@gmail.com)
+[debug] [2025-10-15T11:32:13.206Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ 403
+[debug] [2025-10-15T11:32:13.206Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [omitted]
+[debug] [2025-10-15T11:32:13.208Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com 403
+[debug] [2025-10-15T11:32:13.208Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.214Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ 403
+[debug] [2025-10-15T11:32:13.214Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [omitted]
+[debug] [2025-10-15T11:32:13.308Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com 403
+[debug] [2025-10-15T11:32:13.308Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.308Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com 403
+[debug] [2025-10-15T11:32:13.309Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.310Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com 403
+[debug] [2025-10-15T11:32:13.310Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.310Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com 403
+[debug] [2025-10-15T11:32:13.310Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.311Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com 403
+[debug] [2025-10-15T11:32:13.311Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.312Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com 403
+[debug] [2025-10-15T11:32:13.312Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.312Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com 403
+[debug] [2025-10-15T11:32:13.312Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.313Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com 403
+[debug] [2025-10-15T11:32:13.313Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.313Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com 403
+[debug] [2025-10-15T11:32:13.313Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.314Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com 403
+[debug] [2025-10-15T11:32:13.314Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.314Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com 403
+[debug] [2025-10-15T11:32:13.314Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.315Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com 403
+[debug] [2025-10-15T11:32:13.315Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.346Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com 403
+[debug] [2025-10-15T11:32:13.346Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [omitted]
+[debug] [2025-10-15T11:32:13.359Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com 403
+[debug] [2025-10-15T11:32:13.359Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [omitted]
+[debug] [2025-10-15T11:32:13.510Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com 403
+[debug] [2025-10-15T11:32:13.510Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:13.511Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com 403
+[debug] [2025-10-15T11:32:13.511Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:17.264Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.268Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.268Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.269Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.282Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.283Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.283Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.284Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.284Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.285Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.285Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.285Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.285Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.286Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.288Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.288Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.289Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [none]
+[debug] [2025-10-15T11:32:17.289Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.356Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.357Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.358Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.358Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.363Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.363Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.364Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.365Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.367Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.367Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.369Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.369Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.376Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [none]
+[debug] [2025-10-15T11:32:17.376Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.431Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.431Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.432Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.432Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.432Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.432Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.433Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.433Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.433Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.433Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.433Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.433Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.434Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.434Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.434Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.434Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.434Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.434Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.435Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.435Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.435Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.435Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.435Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.435Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.436Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.436Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.436Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.436Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.436Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.436Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.437Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.437Z] Checked if tokens are valid: true, expires at: 1760531528962
+[debug] [2025-10-15T11:32:17.443Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [none]
+[debug] [2025-10-15T11:32:17.443Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.445Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.445Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.447Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.447Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.451Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.451Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.452Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.452Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.453Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.453Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.456Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.456Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.460Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [none]
+[debug] [2025-10-15T11:32:17.461Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.463Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [none]
+[debug] [2025-10-15T11:32:17.463Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.464Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.464Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.466Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.467Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.469Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.470Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.472Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.472Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.474Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.474Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.475Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-15T11:32:17.476Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:17.476Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [none]
+[debug] [2025-10-15T11:32:17.477Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com x-goog-quota-user=projects/agentient-development
+[debug] [2025-10-15T11:32:19.346Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com 403
+[debug] [2025-10-15T11:32:19.347Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.349Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com 403
+[debug] [2025-10-15T11:32:19.349Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.352Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com 403
+[debug] [2025-10-15T11:32:19.352Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.354Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com 403
+[debug] [2025-10-15T11:32:19.354Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.357Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com 403
+[debug] [2025-10-15T11:32:19.358Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [omitted]
+[debug] [2025-10-15T11:32:19.358Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com 403
+[debug] [2025-10-15T11:32:19.358Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [omitted]
+[debug] [2025-10-15T11:32:19.359Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com 403
+[debug] [2025-10-15T11:32:19.360Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.361Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com 403
+[debug] [2025-10-15T11:32:19.361Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.362Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com 403
+[debug] [2025-10-15T11:32:19.362Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseio.com [omitted]
+[debug] [2025-10-15T11:32:19.364Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ 403
+[debug] [2025-10-15T11:32:19.364Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [omitted]
+[debug] [2025-10-15T11:32:19.408Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com 403
+[debug] [2025-10-15T11:32:19.408Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/fcm.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.413Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com 403
+[debug] [2025-10-15T11:32:19.413Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.415Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ 403
+[debug] [2025-10-15T11:32:19.415Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [omitted]
+[debug] [2025-10-15T11:32:19.415Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com 403
+[debug] [2025-10-15T11:32:19.415Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.415Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com 403
+[debug] [2025-10-15T11:32:19.415Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.416Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com 403
+[debug] [2025-10-15T11:32:19.416Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.416Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com 403
+[debug] [2025-10-15T11:32:19.416Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.417Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com 403
+[debug] [2025-10-15T11:32:19.417Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.417Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com 403
+[debug] [2025-10-15T11:32:19.417Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseremoteconfig.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.417Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com 403
+[debug] [2025-10-15T11:32:19.417Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.418Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ 403
+[debug] [2025-10-15T11:32:19.418Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/ [omitted]
+[debug] [2025-10-15T11:32:19.419Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com 403
+[debug] [2025-10-15T11:32:19.419Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.419Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com 403
+[debug] [2025-10-15T11:32:19.419Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebasecrashlytics.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.423Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com 403
+[debug] [2025-10-15T11:32:19.423Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/agentient-development/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-15T11:32:19.515Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-15T11:32:19.516Z] > authorizing via signed-in user (singh.chana02@gmail.com)
+[debug] [2025-10-15T11:32:19.528Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-15T11:32:19.528Z] > authorizing via signed-in user (singh.chana02@gmail.com)

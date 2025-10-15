@@ -1,0 +1,155 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===== HELPER FUNCTIONS =====
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getTenantId() {
+      return request.auth.token.tenant_id;
+    }
+
+    function isTenantAdmin() {
+      return request.auth.token.role == 'tenant_admin';
+    }
+
+    function belongsToTenant(tenant_id) {
+      return tenant_id == getTenantId();
+    }
+
+    // ===== USERS COLLECTION =====
+    match /users/{userId} {
+      // Rule 1: Users can ALWAYS read their own document (works before custom claims are set)
+      // This enables the signup flow where client waits for onUserCreate to complete
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+
+      // Rule 2: Users can read other users' documents in their tenant (after custom claims exist)
+      allow read: if isAuthenticated()
+        && resource != null
+        && belongsToTenant(resource.data.tenant_id);
+
+      // Only Cloud Functions can create users
+      allow create: if false;
+
+      // Users can update own profile OR admin can update any user in tenant
+      allow update: if isAuthenticated()
+        && (request.auth.uid == userId || isTenantAdmin())
+        && belongsToTenant(resource.data.tenant_id)
+        && request.resource.data.tenant_id == resource.data.tenant_id;
+
+      // No direct deletes - only soft delete via update
+      allow delete: if false;
+    }
+
+    // ===== TENANTS COLLECTION =====
+    match /tenants/{tenantId} {
+      // Only users in the tenant can read tenant info
+      allow read: if isAuthenticated()
+        && getTenantId() == tenantId;
+
+      // Only tenant admins can update settings
+      allow update: if isAuthenticated()
+        && isTenantAdmin()
+        && getTenantId() == tenantId
+        && request.resource.data.created_by == resource.data.created_by;
+
+      // Only Cloud Functions can create/delete tenants
+      allow create, delete: if false;
+    }
+
+    // ===== INVITATIONS COLLECTION =====
+    match /invitations/{inviteId} {
+      // Admins can see all invitations for their tenant
+      // Invited users can see their own invitation by email
+      allow read: if isAuthenticated()
+        && ((isTenantAdmin() && belongsToTenant(resource.data.tenant_id))
+        || request.auth.token.email == resource.data.email);
+
+      // Only tenant admins can create invitations
+      allow create: if isAuthenticated()
+        && isTenantAdmin()
+        && request.resource.data.tenant_id == getTenantId();
+
+      // Only Cloud Functions can update (mark as accepted)
+      allow update: if false;
+
+      // Only tenant admins can delete invitations
+      allow delete: if isAuthenticated()
+        && isTenantAdmin()
+        && belongsToTenant(resource.data.tenant_id);
+    }
+
+    // ===== AUDIT LOGS COLLECTION =====
+    match /audit_logs/{logId} {
+      // Only tenant admins can read audit logs
+      allow read: if isAuthenticated()
+        && isTenantAdmin()
+        && belongsToTenant(resource.data.tenant_id);
+
+      // Only Cloud Functions can create audit logs
+      allow create: if false;
+
+      // Audit logs are immutable
+      allow update, delete: if false;
+    }
+
+    // ===== RATE LIMITS COLLECTION =====
+    match /rate_limits/{limitId} {
+      // Only Cloud Functions can access rate limits
+      allow read, write: if false;
+    }
+
+    // ===== SESSIONS COLLECTION (BFF Pattern) =====
+    match /sessions/{sessionId} {
+      // Only Cloud Functions and Firebase Admin SDK can access sessions
+      // Client apps should NEVER access this collection directly
+      // Sessions contain Firebase tokens and MUST remain server-side only
+      allow read, write: if false;
+    }
+
+    // ===== BUSINESS DATA COLLECTIONS (Example: posts) =====
+    match /posts/{postId} {
+      // Users can read all posts in their tenant
+      allow read: if isAuthenticated()
+        && belongsToTenant(resource.data.tenant_id);
+
+      // Users can create posts with their tenant_id
+      allow create: if isAuthenticated()
+        && request.resource.data.tenant_id == getTenantId()
+        && request.resource.data.created_by == request.auth.uid;
+
+      // Users can update their own posts OR admin can update any post
+      allow update: if isAuthenticated()
+        && belongsToTenant(resource.data.tenant_id)
+        && belongsToTenant(request.resource.data.tenant_id)
+        && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+
+      // Users can delete their own posts OR admin can delete any post
+      allow delete: if isAuthenticated()
+        && belongsToTenant(resource.data.tenant_id)
+        && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+    }
+
+    // ===== COLLECTION GROUP PATTERNS =====
+    // Ensure any collection group queries also enforce tenant isolation
+    match /{path=**}/comments/{commentId} {
+      allow read: if isAuthenticated()
+        && belongsToTenant(resource.data.tenant_id);
+
+      allow create: if isAuthenticated()
+        && request.resource.data.tenant_id == getTenantId()
+        && request.resource.data.created_by == request.auth.uid;
+
+      allow update: if isAuthenticated()
+        && belongsToTenant(resource.data.tenant_id)
+        && belongsToTenant(request.resource.data.tenant_id)
+        && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+
+      allow delete: if isAuthenticated()
+        && belongsToTenant(resource.data.tenant_id)
+        && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+    }
+  }
+}

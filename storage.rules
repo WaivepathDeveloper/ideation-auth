@@ -1,0 +1,59 @@
+rules_version = '2';
+
+// Cloud Storage Security Rules for Multi-Tenant SaaS
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getTenantId() {
+      return request.auth.token.tenant_id;
+    }
+
+    function isTenantAdmin() {
+      return request.auth.token.role == 'tenant_admin';
+    }
+
+    // User exports (GDPR data export)
+    // Matches files like: exports/tenantId/userId_timestamp.json
+    match /exports/{tenantId}/{fileName} {
+      // Extract userId from filename (format: userId_timestamp.json)
+      // Users can only download files from their tenant that start with their userId
+      allow read: if isAuthenticated()
+        && getTenantId() == tenantId
+        && fileName.matches('^' + request.auth.uid + '_.*');
+
+      // Only Cloud Functions can create exports
+      allow write: if false;
+    }
+
+    // User uploads (profile pictures, attachments)
+    match /uploads/{tenantId}/{userId}/{fileName} {
+      // Users can read files from their tenant
+      allow read: if isAuthenticated()
+        && getTenantId() == tenantId;
+
+      // Users can upload their own files
+      allow write: if isAuthenticated()
+        && request.auth.uid == userId
+        && getTenantId() == tenantId
+        && request.resource.size < 5 * 1024 * 1024; // 5MB limit
+    }
+
+    // Tenant shared files
+    match /tenants/{tenantId}/shared/{fileName} {
+      // All users in tenant can read
+      allow read: if isAuthenticated()
+        && getTenantId() == tenantId;
+
+      // Only admins can upload/delete
+      allow write: if isAuthenticated()
+        && isTenantAdmin()
+        && getTenantId() == tenantId
+        && request.resource.size < 50 * 1024 * 1024; // 50MB limit for shared files
+    }
+  }
+}
