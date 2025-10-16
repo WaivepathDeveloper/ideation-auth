@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cleanupRateLimits = void 0;
 const admin = __importStar(require("firebase-admin"));
 const functions = __importStar(require("firebase-functions/v1"));
+const firestore_1 = require("firebase-admin/firestore");
 const db = admin.firestore();
 /**
  * Scheduled Cloud Function: Cleanup expired rate limit records
@@ -83,7 +84,7 @@ exports.cleanupRateLimits = functions.pubsub
             type: 'cleanup_error',
             function: 'cleanupRateLimits',
             error: error instanceof Error ? error.message : String(error),
-            timestamp: admin.firestore.FieldValue.serverTimestamp()
+            timestamp: firestore_1.FieldValue.serverTimestamp()
         });
         throw error;
     }

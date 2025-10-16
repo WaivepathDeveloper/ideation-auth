@@ -16,13 +16,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { signOut as firebaseSignOut } from 'firebase/auth';
+import type { UserRole } from '@/types/roles';
+import { ROLE_LABELS, canManageUsers } from '@/types/roles';
 
 interface DashboardClientProps {
   user: {
     uid: string;
     email: string;
     tenant_id: string;
-    role: 'tenant_admin' | 'user';
+    role: UserRole;
   };
   tenant: {
     id: string;
@@ -80,7 +82,7 @@ export function DashboardClient({ user, tenant }: DashboardClientProps) {
             <div>
               <p className="text-sm font-medium text-muted-foreground">Role</p>
               <p className="text-base capitalize">
-                {user.role === 'tenant_admin' ? 'Admin' : 'User'}
+                {ROLE_LABELS[user.role]}
               </p>
             </div>
             <div>
@@ -173,7 +175,7 @@ export function DashboardClient({ user, tenant }: DashboardClientProps) {
             </CardContent>
           </Card>
 
-          {user.role === 'tenant_admin' && (
+          {canManageUsers(user.role) && (
             <Card className="cursor-pointer transition-shadow hover:shadow-md">
               <CardContent className="flex items-center gap-4 p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">

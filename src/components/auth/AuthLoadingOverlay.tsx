@@ -22,7 +22,6 @@ interface AuthLoadingOverlayProps {
   message?: string;
   showProgress?: boolean;
   progressValue?: number; // 0-100
-  spinnerVariant?: 'default' | 'circle' | 'ring' | 'infinite';
 }
 
 export function AuthLoadingOverlay({
@@ -31,7 +30,6 @@ export function AuthLoadingOverlay({
   message,
   showProgress = false,
   progressValue = 0,
-  spinnerVariant = 'ring',
 }: AuthLoadingOverlayProps) {
   if (!isOpen) return null;
 
@@ -47,9 +45,7 @@ export function AuthLoadingOverlay({
           {/* Spinner */}
           <div className="flex justify-center">
             <Spinner
-              variant={spinnerVariant}
-              size={48}
-              className="text-primary"
+              className="h-12 w-12 text-primary"
               aria-label="Loading"
             />
           </div>

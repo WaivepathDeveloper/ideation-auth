@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v1';
+import { FieldValue } from 'firebase-admin/firestore';
 
 const db = admin.firestore();
 
@@ -118,7 +119,7 @@ export const exportUserData = functions.https.onCall(async (data, context) => {
         action: 'DATA_EXPORTED',
         collection: 'users',
         document_id: userId,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        timestamp: FieldValue.serverTimestamp(),
         changes: {
           export_size: exportSize,
           export_method: 'cloud_storage'

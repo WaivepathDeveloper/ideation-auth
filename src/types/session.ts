@@ -6,6 +6,7 @@
  */
 
 import { Timestamp } from 'firebase/firestore';
+import type { UserRole } from './roles';
 
 export interface Session {
   /**
@@ -27,7 +28,7 @@ export interface Session {
   /**
    * User role within the tenant
    */
-  role: 'tenant_admin' | 'user';
+  role: UserRole;
 
   /**
    * User email (for logging/monitoring)
@@ -99,7 +100,7 @@ export interface Session {
 export interface CreateSessionInput {
   user_id: string;
   tenant_id: string;
-  role: 'tenant_admin' | 'user';
+  role: UserRole;
   email: string;
   firebase_token: string;
   ip_address: string;
@@ -114,7 +115,7 @@ export interface SessionContext {
   session_id: string;
   user_id: string;
   tenant_id: string;
-  role: 'tenant_admin' | 'user';
+  role: UserRole;
   email: string;
   expires_at: Date;
   last_activity: Date;

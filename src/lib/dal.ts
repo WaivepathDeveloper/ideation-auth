@@ -15,6 +15,8 @@
 
 import { cache } from 'react';
 import { headers } from 'next/headers';
+import type { UserRole } from '@/types/roles';
+import { canManageUsers } from '@/types/roles';
 
 /**
  * Session context from middleware headers
@@ -23,7 +25,7 @@ import { headers } from 'next/headers';
 export interface SessionContext {
   user_id: string;
   tenant_id: string;
-  role: 'tenant_admin' | 'user';
+  role: UserRole;
   email: string;
 }
 
@@ -50,7 +52,7 @@ export const getCurrentSession = cache(async (): Promise<SessionContext | null> 
 
     const userId = headersList.get('x-user-id');
     const tenantId = headersList.get('x-tenant-id');
-    const role = headersList.get('x-user-role') as 'tenant_admin' | 'user' | null;
+    const role = headersList.get('x-user-role') as SessionContext['role'] | null;
     const email = headersList.get('x-user-email');
 
     // If any required header is missing, user is not authenticated
@@ -93,7 +95,7 @@ export async function requireAuth(): Promise<SessionContext> {
  * @throws Error if user doesn't have required role
  * @returns Session context
  */
-export async function requireRole(role: 'tenant_admin' | 'user'): Promise<SessionContext> {
+export async function requireRole(role: SessionContext['role']): Promise<SessionContext> {
   const session = await requireAuth();
 
   if (session.role !== role) {
@@ -104,13 +106,19 @@ export async function requireRole(role: 'tenant_admin' | 'user'): Promise<Sessio
 }
 
 /**
- * Verify user is tenant admin
+ * Verify user is tenant admin (owner or admin)
  *
  * @throws Error if user is not tenant admin
  * @returns Session context
  */
 export async function requireAdmin(): Promise<SessionContext> {
-  return requireRole('tenant_admin');
+  const session = await requireAuth();
+
+  if (!canManageUsers(session.role)) {
+    throw new Error('Unauthorized. Admin access required.');
+  }
+
+  return session;
 }
 
 /**
@@ -158,7 +166,7 @@ export async function getCurrentTenantId(): Promise<string> {
  * @throws Error if not authenticated
  * @returns User role
  */
-export async function getCurrentUserRole(): Promise<'tenant_admin' | 'user'> {
+export async function getCurrentUserRole(): Promise<SessionContext['role']> {
   const session = await requireAuth();
   return session.role;
 }
@@ -174,13 +182,13 @@ export async function isAuthenticated(): Promise<boolean> {
 }
 
 /**
- * Check if current user is tenant admin
+ * Check if current user is tenant admin (owner or admin)
  *
  * @returns true if tenant admin, false otherwise
  */
 export async function isAdmin(): Promise<boolean> {
   const session = await getCurrentSession();
-  return session?.role === 'tenant_admin';
+  return session ? canManageUsers(session.role) : false;
 }
 
 /**
@@ -277,7 +285,8 @@ export async function getUserProfile(userId: string) {
 
   // 2. Validate user can access this data
   // (In this case, user can only access their own profile or admin can access any)
-  if (session.user_id !== userId && session.role !== 'tenant_admin') {
+  const isAdminUser = canManageUsers(session.role);
+  if (session.user_id !== userId && !isAdminUser) {
     throw new Error('Unauthorized. Cannot access other user profiles.');
   }
 

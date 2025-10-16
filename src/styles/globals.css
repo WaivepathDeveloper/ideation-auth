@@ -160,3 +160,66 @@
     font-family: var(--font-sans);
   }
 }
+
+/* ============================================
+   Role Badge Styles
+   Uses design tokens for consistent theming
+   ============================================ */
+
+/* Role-specific colors (uses CSS variables from design tokens) */
+.badge-owner {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.badge-admin {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border-color: hsl(var(--secondary));
+}
+
+.badge-member {
+  background-color: hsl(var(--success));
+  color: hsl(var(--success-foreground));
+  border-color: hsl(var(--success));
+}
+
+.badge-guest {
+  background-color: hsl(var(--warning));
+  color: hsl(var(--warning-foreground));
+  border-color: hsl(var(--warning));
+}
+
+.badge-viewer {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  border-color: hsl(var(--muted));
+}
+
+/* Badge size variants (uses spacing tokens) */
+.badge-size-sm {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.badge-size-md {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.badge-size-lg {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+/* Icon styling within badges */
+.badge-icon {
+  margin-right: var(--spacing-xs);
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}

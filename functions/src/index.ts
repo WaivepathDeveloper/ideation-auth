@@ -19,6 +19,8 @@ export { onUserCreate } from './auth/onUserCreate';
 export { inviteUser } from './auth/inviteUser';
 export { updateUserRole } from './auth/updateUserRole';
 export { deleteUserFromTenant } from './auth/deleteUserFromTenant';
+export { transferOwnership } from './auth/transferOwnership';
+export { updateGuestPermissions } from './auth/updateGuestPermissions';
 
 // Scheduled Functions - Maintenance
 export { cleanupRateLimits } from './scheduled/cleanupRateLimits';

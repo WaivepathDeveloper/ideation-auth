@@ -1,7 +1,14 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v1';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 
-const db = admin.firestore();
+/**
+ * Get Firestore instance (lazy initialization)
+ * This ensures firebase-admin is fully initialized before accessing firestore
+ */
+function getDb() {
+  return admin.firestore();
+}
 
 /**
  * Layer 1: Login Rate Limiting
@@ -9,8 +16,9 @@ const db = admin.firestore();
  * Limit: 5 attempts per 15 minutes
  */
 export async function checkLoginRateLimit(email: string): Promise<void> {
+  const db = getDb();
   const limitDoc = await db.collection('rate_limits').doc(`auth_${email}`).get();
-  const now = admin.firestore.Timestamp.now();
+  const now = Timestamp.now();
   const windowDuration = 15 * 60 * 1000; // 15 minutes
   const maxAttempts = 5;
 
@@ -46,7 +54,7 @@ export async function checkLoginRateLimit(email: string): Promise<void> {
         // Block for 15 minutes
         await limitDoc.ref.update({
           count: newCount,
-          blocked_until: admin.firestore.Timestamp.fromMillis(now.toMillis() + windowDuration)
+          blocked_until: Timestamp.fromMillis(now.toMillis() + windowDuration)
         });
 
         throw new functions.https.HttpsError(
@@ -73,6 +81,7 @@ export async function checkLoginRateLimit(email: string): Promise<void> {
  * Clear login rate limit on successful authentication
  */
 export async function clearLoginRateLimit(email: string): Promise<void> {
+  const db = getDb();
   await db.collection('rate_limits').doc(`auth_${email}`).delete();
 }
 
@@ -82,6 +91,7 @@ export async function clearLoginRateLimit(email: string): Promise<void> {
  * Limit: 100 requests per minute per user
  */
 export async function checkAPIRateLimit(userId: string): Promise<void> {
+  const db = getDb();
   const limitKey = `api_${userId}_${getMinuteKey()}`;
   const limitDoc = await db.collection('rate_limits').doc(limitKey).get();
   const maxRequests = 100;
@@ -98,7 +108,7 @@ export async function checkAPIRateLimit(userId: string): Promise<void> {
 
     // Increment counter
     await limitDoc.ref.update({
-      count: admin.firestore.FieldValue.increment(1)
+      count: FieldValue.increment(1)
     });
   } else {
     // Create new counter with TTL
@@ -106,8 +116,8 @@ export async function checkAPIRateLimit(userId: string): Promise<void> {
       key: userId,
       type: 'api',
       count: 1,
-      created_at: admin.firestore.FieldValue.serverTimestamp(),
-      expires_at: admin.firestore.Timestamp.fromMillis(Date.now() + 120000) // 2 minutes
+      created_at: FieldValue.serverTimestamp(),
+      expires_at: Timestamp.fromMillis(Date.now() + 120000) // 2 minutes
     });
   }
 }
@@ -118,6 +128,7 @@ export async function checkAPIRateLimit(userId: string): Promise<void> {
  * Limit: 1000 requests per minute per tenant
  */
 export async function checkTenantRateLimit(tenantId: string): Promise<void> {
+  const db = getDb();
   const limitKey = `tenant_${tenantId}_${getMinuteKey()}`;
   const limitDoc = await db.collection('rate_limits').doc(limitKey).get();
   const maxRequests = 1000;
@@ -131,15 +142,15 @@ export async function checkTenantRateLimit(tenantId: string): Promise<void> {
 
   if (limitDoc.exists) {
     await limitDoc.ref.update({
-      count: admin.firestore.FieldValue.increment(1)
+      count: FieldValue.increment(1)
     });
   } else {
     await limitDoc.ref.set({
       key: tenantId,
       type: 'tenant',
       count: 1,
-      created_at: admin.firestore.FieldValue.serverTimestamp(),
-      expires_at: admin.firestore.Timestamp.fromMillis(Date.now() + 120000) // 2 minutes
+      created_at: FieldValue.serverTimestamp(),
+      expires_at: Timestamp.fromMillis(Date.now() + 120000) // 2 minutes
     });
   }
 }

@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v1';
+import { FieldValue } from 'firebase-admin/firestore';
 
 const db = admin.firestore();
 
@@ -57,7 +58,7 @@ export const cleanupRateLimits = functions.pubsub
         type: 'cleanup_error',
         function: 'cleanupRateLimits',
         error: error instanceof Error ? error.message : String(error),
-        timestamp: admin.firestore.FieldValue.serverTimestamp()
+        timestamp: FieldValue.serverTimestamp()
       });
 
       throw error;

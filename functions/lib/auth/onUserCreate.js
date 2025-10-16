@@ -80,11 +80,17 @@ exports.onUserCreate = functions.auth.user().onCreate(async (user) => {
         }
         else {
             // New user - create new tenant
+            // Owner role ONLY assigned manually via Firestore by system admin
             tenant_id = db.collection('tenants').doc().id;
-            role = 'tenant_admin';
+            role = 'admin'; // First user becomes admin, NOT owner
             console.log(`Creating new tenant ${tenant_id} for user ${email}`);
-            // Create tenant document
+            // Create tenant document (owner_id NOT set - will be set manually later)
+            // SECURITY: Validate tenant_id format before creating document
+            if (!tenant_id || tenant_id.length < 10) {
+                throw new Error('Invalid tenant_id generated');
+            }
             await db.collection('tenants').doc(tenant_id).set({
+                tenant_id: tenant_id, // SECURITY: Enables uniform validation across all collections
                 name: `${email.split('@')[0]}'s Organization`,
                 created_by: uid,
                 created_at: firestore_1.FieldValue.serverTimestamp(),
@@ -101,6 +107,17 @@ exports.onUserCreate = functions.auth.user().onCreate(async (user) => {
                     company_size: ''
                 }
             });
+            // SECURITY: Verify tenant document was created with correct tenant_id
+            const verifyDoc = await db.collection('tenants').doc(tenant_id).get();
+            if (!verifyDoc.exists || verifyDoc.data()?.tenant_id !== tenant_id) {
+                console.error('🚨 CRITICAL: Tenant creation verification failed', {
+                    tenant_id,
+                    exists: verifyDoc.exists,
+                    actual_tenant_id: verifyDoc.data()?.tenant_id,
+                });
+                throw new Error('Tenant creation verification failed');
+            }
+            console.log(`✅ Tenant ${tenant_id} created and verified successfully`);
         }
         // Step 2: Set custom claims (CRITICAL for security)
         await admin.auth().setCustomUserClaims(uid, { tenant_id, role });

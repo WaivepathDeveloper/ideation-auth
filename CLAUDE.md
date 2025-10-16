@@ -59,7 +59,7 @@ export default async function MyPage() {
 }
 ```
 
-**Exception**: Only `tenants` and `users` collections can be accessed directly in rare admin scenarios, but still require tenant_id verification in security rules.
+**IMPORTANT**: ALL collections (including `tenants` and `users`) MUST have `tenant_id` field for uniform security validation. No exceptions to this rule - every document in the database must be tenant-scoped for consistent security enforcement.
 
 ## Custom Claims & Token Management
 
@@ -107,6 +107,40 @@ Every tenant-scoped collection MUST include:
 ```
 
 TenantFirestore automatically handles `tenant_id`, `created_by`, `created_at`, `updated_at`, `updated_by`, `deleted`, `deleted_at`, `deleted_by`.
+
+### Tenant Collection Schema
+
+The `tenants` collection has special requirements and MUST include:
+
+```typescript
+{
+  tenant_id: string;        // MUST equal document ID (validated in Firestore rules)
+  name: string;             // Organization name
+  status: 'active' | 'suspended' | 'deleted';
+  created_by: string;       // User UID who created (IMMUTABLE)
+  created_at: Timestamp;    // Server timestamp
+  updated_at: Timestamp;    // Server timestamp
+  owner_id?: string;        // Set manually by admin (IMMUTABLE after set)
+  settings: {
+    max_users: number;
+    features: string[];
+    subscription_plan: string;
+    billing_email: string;
+  };
+  metadata?: {
+    industry?: string;
+    company_size?: string;
+  };
+}
+```
+
+**Security Invariants for Tenants Collection:**
+- ✅ `tenant_id` field MUST equal document ID (enforced in Firestore rules)
+- ✅ `tenant_id` is IMMUTABLE (cannot be changed after creation)
+- ✅ `created_by` is IMMUTABLE (tracks original creator)
+- ✅ `owner_id` is IMMUTABLE after first set (prevents ownership hijacking)
+- ✅ Double validation: Both JWT token AND document field must match
+- ✅ Only Cloud Functions can create tenant documents
 
 ### Firestore Indexes
 
@@ -763,6 +797,12 @@ Records auto-expire and are cleaned up hourly by `cleanupRateLimits` scheduled f
 
 ## 4. Recent Work Log
 <!-- Auto-updated by SubagentStop hook (max 10 entries) -->
+- **2025-10-16 07:01** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)
+- **2025-10-15 12:36** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)
+- **2025-10-15 12:35** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)
+- **2025-10-15 12:26** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)
+- **2025-10-15 12:15** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)
+- **2025-10-15 12:07** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)
 - **2025-10-13 09:50** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)
 - **2025-10-13 09:41** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)
 - **2025-10-07 06:16** | `unknown` | Subagent completed successfully. → [Details](.claude/context/unknown_findings.md)

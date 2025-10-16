@@ -1,12 +1,14 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v1';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 import { checkAPIRateLimit } from '../utils/rateLimiting';
 
 const db = admin.firestore();
 
 interface InviteUserData {
   email: string;
-  role: 'tenant_admin' | 'user';
+  role: 'admin' | 'member' | 'guest' | 'viewer';
+  resource_permissions?: Record<string, string[]>; // For guest role: collection -> document IDs
 }
 
 /**
@@ -25,16 +27,35 @@ export const inviteUser = functions.https.onCall(async (data: InviteUserData, co
   // Rate limiting
   await checkAPIRateLimit(context.auth.uid);
 
-  // Permission check - only tenant admins can invite
-  if (context.auth.token.role !== 'tenant_admin') {
+  // Permission check - only admins can invite
+  if (context.auth.token.role !== 'admin' && context.auth.token.role !== 'owner') {
     throw new functions.https.HttpsError(
       'permission-denied',
-      'Only tenant administrators can invite users'
+      'Only Admins and Owners can invite users'
     );
   }
 
-  const { email, role } = data;
+  const { email, role, resource_permissions } = data;
   const tenant_id = context.auth.token.tenant_id as string;
+
+  // Only owner can invite admin
+  if (role === 'admin') {
+    const tenantDoc = await db.collection('tenants').doc(tenant_id).get();
+    if (tenantDoc.data()?.owner_id !== context.auth.uid) {
+      throw new functions.https.HttpsError(
+        'permission-denied',
+        'Only the Owner can invite Admins'
+      );
+    }
+  }
+
+  // Guest role requires resource_permissions
+  if (role === 'guest' && !resource_permissions) {
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'Guest role requires resource_permissions map'
+    );
+  }
 
   // Validate input
   if (!email || !email.includes('@')) {
@@ -44,10 +65,10 @@ export const inviteUser = functions.https.onCall(async (data: InviteUserData, co
     );
   }
 
-  if (!role || !['user', 'tenant_admin'].includes(role)) {
+  if (!role || !['admin', 'member', 'guest', 'viewer'].includes(role)) {
     throw new functions.https.HttpsError(
       'invalid-argument',
-      'Role must be either "user" or "tenant_admin"'
+      'Role must be one of: admin, member, guest, viewer'
     );
   }
 
@@ -98,15 +119,22 @@ export const inviteUser = functions.https.onCall(async (data: InviteUserData, co
   }
 
   // Create invitation
-  const inviteRef = await db.collection('invitations').add({
+  const inviteData: any = {
     tenant_id,
     email,
     role,
     invited_by: context.auth.uid,
-    invited_at: admin.firestore.FieldValue.serverTimestamp(),
+    invited_at: FieldValue.serverTimestamp(),
     status: 'pending',
-    expires_at: admin.firestore.Timestamp.fromMillis(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
-  });
+    expires_at: Timestamp.fromMillis(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+  };
+
+  // Include resource_permissions for guest role
+  if (role === 'guest' && resource_permissions) {
+    inviteData.resource_permissions = resource_permissions;
+  }
+
+  const inviteRef = await db.collection('invitations').add(inviteData);
 
   // Create audit log
   await db.collection('audit_logs').add({
@@ -115,7 +143,7 @@ export const inviteUser = functions.https.onCall(async (data: InviteUserData, co
     action: 'INVITATION_CREATED',
     collection: 'invitations',
     document_id: inviteRef.id,
-    timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    timestamp: FieldValue.serverTimestamp(),
     changes: {
       email,
       role

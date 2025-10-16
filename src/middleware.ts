@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authMiddleware, redirectToHome, redirectToLogin } from 'next-firebase-auth-edge';
+import { authMiddleware, redirectToLogin } from 'next-firebase-auth-edge';
 import { authConfig } from '@/config/auth-edge.config';
 
 /**

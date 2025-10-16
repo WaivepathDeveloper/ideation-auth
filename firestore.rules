@@ -11,12 +11,49 @@ service cloud.firestore {
       return request.auth.token.tenant_id;
     }
 
-    function isTenantAdmin() {
-      return request.auth.token.role == 'tenant_admin';
-    }
-
     function belongsToTenant(tenant_id) {
       return tenant_id == getTenantId();
+    }
+
+    // ===== ROLE HELPER FUNCTIONS (5-Role Hierarchy) =====
+    function isOwner() {
+      return request.auth != null
+        && request.auth.token.role == 'owner';
+    }
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.role == 'admin';
+    }
+
+    function isMember() {
+      return request.auth != null
+        && request.auth.token.role == 'member';
+    }
+
+    function isGuest() {
+      return request.auth != null
+        && request.auth.token.role == 'guest';
+    }
+
+    function isViewer() {
+      return request.auth != null
+        && request.auth.token.role == 'viewer';
+    }
+
+    function canManageUsers() {
+      return isOwner() || isAdmin();
+    }
+
+    function canEditData() {
+      return isOwner() || isAdmin() || isMember();
+    }
+
+    function hasResourceAccess(collection, docId) {
+      return isGuest()
+        && request.auth.token.resource_permissions != null
+        && request.auth.token.resource_permissions[collection] != null
+        && docId in request.auth.token.resource_permissions[collection];
     }
 
     // ===== USERS COLLECTION =====
@@ -33,11 +70,16 @@ service cloud.firestore {
       // Only Cloud Functions can create users
       allow create: if false;
 
-      // Users can update own profile OR admin can update any user in tenant
+      // Users can update own profile OR admin/owner can update any user in tenant
+      // Role field changes ONLY via Cloud Functions (prevents tampering)
       allow update: if isAuthenticated()
-        && (request.auth.uid == userId || isTenantAdmin())
         && belongsToTenant(resource.data.tenant_id)
-        && request.resource.data.tenant_id == resource.data.tenant_id;
+        && belongsToTenant(request.resource.data.tenant_id)
+        && (
+          request.auth.uid == userId  // Users can update own profile
+          || canManageUsers()         // Owner/Admin can update others
+        )
+        && request.resource.data.role == resource.data.role;  // Role changes via Cloud Function only
 
       // No direct deletes - only soft delete via update
       allow delete: if false;
@@ -45,15 +87,22 @@ service cloud.firestore {
 
     // ===== TENANTS COLLECTION =====
     match /tenants/{tenantId} {
-      // Only users in the tenant can read tenant info
+      // SECURITY: Read requires BOTH token validation AND document tenant_id validation
+      // This provides defense-in-depth: even if one layer fails, the other protects
       allow read: if isAuthenticated()
-        && getTenantId() == tenantId;
-
-      // Only tenant admins can update settings
-      allow update: if isAuthenticated()
-        && isTenantAdmin()
         && getTenantId() == tenantId
-        && request.resource.data.created_by == resource.data.created_by;
+        && resource.data.tenant_id == tenantId;  // Double validation: doc tenant_id must match doc ID
+
+      // SECURITY: Update with comprehensive immutability checks
+      // Prevents tenant_id tampering, owner_id tampering, and created_by tampering
+      allow update: if isAuthenticated()
+        && getTenantId() == tenantId
+        && canManageUsers()  // Owner or Admin can update settings
+        && resource.data.tenant_id == tenantId  // Current tenant_id must match doc ID
+        && request.resource.data.tenant_id == tenantId  // New tenant_id must match doc ID
+        && request.resource.data.tenant_id == resource.data.tenant_id  // tenant_id is IMMUTABLE
+        && request.resource.data.created_by == resource.data.created_by  // created_by is IMMUTABLE
+        && (!('owner_id' in request.resource.data) || request.resource.data.owner_id == resource.data.owner_id);  // owner_id is IMMUTABLE
 
       // Only Cloud Functions can create/delete tenants
       allow create, delete: if false;
@@ -61,31 +110,31 @@ service cloud.firestore {
 
     // ===== INVITATIONS COLLECTION =====
     match /invitations/{inviteId} {
-      // Admins can see all invitations for their tenant
+      // Admins/Owners can see all invitations for their tenant
       // Invited users can see their own invitation by email
       allow read: if isAuthenticated()
-        && ((isTenantAdmin() && belongsToTenant(resource.data.tenant_id))
+        && ((canManageUsers() && belongsToTenant(resource.data.tenant_id))
         || request.auth.token.email == resource.data.email);
 
-      // Only tenant admins can create invitations
+      // Only admins/owners can create invitations
       allow create: if isAuthenticated()
-        && isTenantAdmin()
+        && canManageUsers()
         && request.resource.data.tenant_id == getTenantId();
 
       // Only Cloud Functions can update (mark as accepted)
       allow update: if false;
 
-      // Only tenant admins can delete invitations
+      // Only admins/owners can delete invitations
       allow delete: if isAuthenticated()
-        && isTenantAdmin()
+        && canManageUsers()
         && belongsToTenant(resource.data.tenant_id);
     }
 
     // ===== AUDIT LOGS COLLECTION =====
     match /audit_logs/{logId} {
-      // Only tenant admins can read audit logs
+      // Only admins/owners can read audit logs
       allow read: if isAuthenticated()
-        && isTenantAdmin()
+        && canManageUsers()
         && belongsToTenant(resource.data.tenant_id);
 
       // Only Cloud Functions can create audit logs
@@ -111,45 +160,67 @@ service cloud.firestore {
 
     // ===== BUSINESS DATA COLLECTIONS (Example: posts) =====
     match /posts/{postId} {
-      // Users can read all posts in their tenant
+      // Read access: Owner/Admin/Member/Viewer can read all, Guest can read if permitted
       allow read: if isAuthenticated()
-        && belongsToTenant(resource.data.tenant_id);
+        && belongsToTenant(resource.data.tenant_id)
+        && (
+          canEditData()  // Owner, Admin, Member can read all
+          || isViewer()  // Viewer can read all
+          || hasResourceAccess('posts', postId)  // Guest can read if permitted
+        );
 
-      // Users can create posts with their tenant_id
+      // Create: Only Owner, Admin, Member can create
       allow create: if isAuthenticated()
         && request.resource.data.tenant_id == getTenantId()
-        && request.resource.data.created_by == request.auth.uid;
+        && request.resource.data.created_by == request.auth.uid
+        && canEditData();  // Only Owner, Admin, Member
 
-      // Users can update their own posts OR admin can update any post
+      // Update: Only Owner, Admin, Member can update
+      // Must be owner of document OR admin/owner
       allow update: if isAuthenticated()
         && belongsToTenant(resource.data.tenant_id)
         && belongsToTenant(request.resource.data.tenant_id)
-        && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+        && canEditData()  // Only Owner, Admin, Member
+        && (resource.data.created_by == request.auth.uid || canManageUsers());
 
-      // Users can delete their own posts OR admin can delete any post
+      // Delete: Only Owner, Admin, Member can delete
+      // Must be owner of document OR admin/owner
       allow delete: if isAuthenticated()
         && belongsToTenant(resource.data.tenant_id)
-        && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+        && canEditData()  // Only Owner, Admin, Member
+        && (resource.data.created_by == request.auth.uid || canManageUsers());
     }
 
     // ===== COLLECTION GROUP PATTERNS =====
     // Ensure any collection group queries also enforce tenant isolation
     match /{path=**}/comments/{commentId} {
+      // Read access: Owner/Admin/Member/Viewer can read all, Guest can read if permitted
       allow read: if isAuthenticated()
-        && belongsToTenant(resource.data.tenant_id);
+        && belongsToTenant(resource.data.tenant_id)
+        && (
+          canEditData()
+          || isViewer()
+          || hasResourceAccess('comments', commentId)
+        );
 
+      // Create: Only Owner, Admin, Member can create
       allow create: if isAuthenticated()
         && request.resource.data.tenant_id == getTenantId()
-        && request.resource.data.created_by == request.auth.uid;
+        && request.resource.data.created_by == request.auth.uid
+        && canEditData();
 
+      // Update: Only Owner, Admin, Member can update
       allow update: if isAuthenticated()
         && belongsToTenant(resource.data.tenant_id)
         && belongsToTenant(request.resource.data.tenant_id)
-        && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+        && canEditData()
+        && (resource.data.created_by == request.auth.uid || canManageUsers());
 
+      // Delete: Only Owner, Admin, Member can delete
       allow delete: if isAuthenticated()
         && belongsToTenant(resource.data.tenant_id)
-        && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+        && canEditData()
+        && (resource.data.created_by == request.auth.uid || canManageUsers());
     }
   }
 }

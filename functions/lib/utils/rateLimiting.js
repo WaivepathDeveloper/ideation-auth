@@ -39,15 +39,23 @@ exports.checkAPIRateLimit = checkAPIRateLimit;
 exports.checkTenantRateLimit = checkTenantRateLimit;
 const admin = __importStar(require("firebase-admin"));
 const functions = __importStar(require("firebase-functions/v1"));
-const db = admin.firestore();
+const firestore_1 = require("firebase-admin/firestore");
+/**
+ * Get Firestore instance (lazy initialization)
+ * This ensures firebase-admin is fully initialized before accessing firestore
+ */
+function getDb() {
+    return admin.firestore();
+}
 /**
  * Layer 1: Login Rate Limiting
  * Prevents brute force attacks by limiting login attempts per email
  * Limit: 5 attempts per 15 minutes
  */
 async function checkLoginRateLimit(email) {
+    const db = getDb();
     const limitDoc = await db.collection('rate_limits').doc(`auth_${email}`).get();
-    const now = admin.firestore.Timestamp.now();
+    const now = firestore_1.Timestamp.now();
     const windowDuration = 15 * 60 * 1000; // 15 minutes
     const maxAttempts = 5;
     if (limitDoc.exists) {
@@ -76,7 +84,7 @@ async function checkLoginRateLimit(email) {
                 // Block for 15 minutes
                 await limitDoc.ref.update({
                     count: newCount,
-                    blocked_until: admin.firestore.Timestamp.fromMillis(now.toMillis() + windowDuration)
+                    blocked_until: firestore_1.Timestamp.fromMillis(now.toMillis() + windowDuration)
                 });
                 throw new functions.https.HttpsError('resource-exhausted', 'Too many failed login attempts. Account temporarily locked for 15 minutes.');
             }
@@ -100,6 +108,7 @@ async function checkLoginRateLimit(email) {
  * Clear login rate limit on successful authentication
  */
 async function clearLoginRateLimit(email) {
+    const db = getDb();
     await db.collection('rate_limits').doc(`auth_${email}`).delete();
 }
 /**
@@ -108,6 +117,7 @@ async function clearLoginRateLimit(email) {
  * Limit: 100 requests per minute per user
  */
 async function checkAPIRateLimit(userId) {
+    const db = getDb();
     const limitKey = `api_${userId}_${getMinuteKey()}`;
     const limitDoc = await db.collection('rate_limits').doc(limitKey).get();
     const maxRequests = 100;
@@ -118,7 +128,7 @@ async function checkAPIRateLimit(userId) {
         }
         // Increment counter
         await limitDoc.ref.update({
-            count: admin.firestore.FieldValue.increment(1)
+            count: firestore_1.FieldValue.increment(1)
         });
     }
     else {
@@ -127,8 +137,8 @@ async function checkAPIRateLimit(userId) {
             key: userId,
             type: 'api',
             count: 1,
-            created_at: admin.firestore.FieldValue.serverTimestamp(),
-            expires_at: admin.firestore.Timestamp.fromMillis(Date.now() + 120000) // 2 minutes
+            created_at: firestore_1.FieldValue.serverTimestamp(),
+            expires_at: firestore_1.Timestamp.fromMillis(Date.now() + 120000) // 2 minutes
         });
     }
 }
@@ -138,6 +148,7 @@ async function checkAPIRateLimit(userId) {
  * Limit: 1000 requests per minute per tenant
  */
 async function checkTenantRateLimit(tenantId) {
+    const db = getDb();
     const limitKey = `tenant_${tenantId}_${getMinuteKey()}`;
     const limitDoc = await db.collection('rate_limits').doc(limitKey).get();
     const maxRequests = 1000;
@@ -146,7 +157,7 @@ async function checkTenantRateLimit(tenantId) {
     }
     if (limitDoc.exists) {
         await limitDoc.ref.update({
-            count: admin.firestore.FieldValue.increment(1)
+            count: firestore_1.FieldValue.increment(1)
         });
     }
     else {
@@ -154,8 +165,8 @@ async function checkTenantRateLimit(tenantId) {
             key: tenantId,
             type: 'tenant',
             count: 1,
-            created_at: admin.firestore.FieldValue.serverTimestamp(),
-            expires_at: admin.firestore.Timestamp.fromMillis(Date.now() + 120000) // 2 minutes
+            created_at: firestore_1.FieldValue.serverTimestamp(),
+            expires_at: firestore_1.Timestamp.fromMillis(Date.now() + 120000) // 2 minutes
         });
     }
 }

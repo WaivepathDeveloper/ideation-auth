@@ -5,14 +5,18 @@
  * - Displays access denied message
  * - Provides navigation back to dashboard or home
  *
- * NOTE: This is a simple static page. We don't fetch user data since
- * users reaching this page either don't have permission or aren't logged in.
+ * ARCHITECTURE: Dynamic page that checks session to customize error message.
+ * Marked as dynamic because it uses headers() via getCurrentSession().
  */
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { getCurrentSession } from '@/lib/dal';
+import { ROLE_LABELS } from '@/types/roles';
+
+// Force dynamic rendering - this page needs runtime session data
+export const dynamic = 'force-dynamic';
 
 export default async function UnauthorizedPage() {
   // Check if user is authenticated (optional - for customizing message)
@@ -47,7 +51,7 @@ export default async function UnauthorizedPage() {
           <div className="rounded-lg bg-muted p-4">
             <p className="text-sm text-muted-foreground">
               {session
-                ? `Your current role (${session.role === 'tenant_admin' ? 'Admin' : 'User'}) doesn&apos;t have access to this resource.`
+                ? `Your current role (${ROLE_LABELS[session.role]}) doesn&apos;t have access to this resource.`
                 : 'You need to be signed in to access this page.'}
             </p>
           </div>

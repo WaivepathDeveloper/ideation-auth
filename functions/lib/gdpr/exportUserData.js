@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.exportUserData = void 0;
 const admin = __importStar(require("firebase-admin"));
 const functions = __importStar(require("firebase-functions/v1"));
+const firestore_1 = require("firebase-admin/firestore");
 const db = admin.firestore();
 /**
  * POST-MVP: GDPR Data Export Function
@@ -137,7 +138,7 @@ exports.exportUserData = functions.https.onCall(async (data, context) => {
                 action: 'DATA_EXPORTED',
                 collection: 'users',
                 document_id: userId,
-                timestamp: admin.firestore.FieldValue.serverTimestamp(),
+                timestamp: firestore_1.FieldValue.serverTimestamp(),
                 changes: {
                     export_size: exportSize,
                     export_method: 'cloud_storage'

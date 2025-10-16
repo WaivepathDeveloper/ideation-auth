@@ -43,7 +43,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cleanupRateLimits = exports.deleteUserFromTenant = exports.updateUserRole = exports.inviteUser = exports.onUserCreate = void 0;
+exports.cleanupRateLimits = exports.updateGuestPermissions = exports.transferOwnership = exports.deleteUserFromTenant = exports.updateUserRole = exports.inviteUser = exports.onUserCreate = void 0;
 const admin = __importStar(require("firebase-admin"));
 // Initialize Firebase Admin SDK
 admin.initializeApp();
@@ -56,6 +56,10 @@ var updateUserRole_1 = require("./auth/updateUserRole");
 Object.defineProperty(exports, "updateUserRole", { enumerable: true, get: function () { return updateUserRole_1.updateUserRole; } });
 var deleteUserFromTenant_1 = require("./auth/deleteUserFromTenant");
 Object.defineProperty(exports, "deleteUserFromTenant", { enumerable: true, get: function () { return deleteUserFromTenant_1.deleteUserFromTenant; } });
+var transferOwnership_1 = require("./auth/transferOwnership");
+Object.defineProperty(exports, "transferOwnership", { enumerable: true, get: function () { return transferOwnership_1.transferOwnership; } });
+var updateGuestPermissions_1 = require("./auth/updateGuestPermissions");
+Object.defineProperty(exports, "updateGuestPermissions", { enumerable: true, get: function () { return updateGuestPermissions_1.updateGuestPermissions; } });
 // Scheduled Functions - Maintenance
 var cleanupRateLimits_1 = require("./scheduled/cleanupRateLimits");
 Object.defineProperty(exports, "cleanupRateLimits", { enumerable: true, get: function () { return cleanupRateLimits_1.cleanupRateLimits; } });

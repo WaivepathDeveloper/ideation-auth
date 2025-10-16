@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v1';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 import { checkAPIRateLimit } from '../utils/rateLimiting';
 
 const db = admin.firestore();
@@ -102,7 +103,7 @@ export const deleteUserFromTenant = functions.https.onCall(async (data: DeleteUs
       action: 'USER_HARD_DELETED',
       collection: 'users',
       document_id: user_id,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      timestamp: FieldValue.serverTimestamp(),
       changes: {
         deleted_user_email: userData.email,
         deletion_type: 'hard'
@@ -121,9 +122,9 @@ export const deleteUserFromTenant = functions.https.onCall(async (data: DeleteUs
     // 1. Mark as deleted in Firestore
     await db.collection('users').doc(user_id).update({
       status: 'deleted',
-      deleted_at: admin.firestore.FieldValue.serverTimestamp(),
+      deleted_at: FieldValue.serverTimestamp(),
       deleted_by: context.auth.uid,
-      updated_at: admin.firestore.FieldValue.serverTimestamp()
+      updated_at: FieldValue.serverTimestamp()
     });
 
     // 2. Revoke custom claims (removes access immediately)
@@ -136,11 +137,11 @@ export const deleteUserFromTenant = functions.https.onCall(async (data: DeleteUs
       action: 'USER_DELETED',
       collection: 'users',
       document_id: user_id,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      timestamp: FieldValue.serverTimestamp(),
       changes: {
         deleted_user_email: userData.email,
         deletion_type: 'soft',
-        recoverable_until: admin.firestore.Timestamp.fromMillis(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+        recoverable_until: Timestamp.fromMillis(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
       }
     });
 

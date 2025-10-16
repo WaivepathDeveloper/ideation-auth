@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v1';
+import { FieldValue } from 'firebase-admin/firestore';
 
 const db = admin.firestore();
 
@@ -54,7 +55,7 @@ export const cleanupDeletedData = functions.pubsub
             tenant_id: doc.data().tenant_id,
             deleted_by: doc.data().deleted_by,
             deleted_at: doc.data().deleted_at,
-            hard_deleted_at: admin.firestore.FieldValue.serverTimestamp(),
+            hard_deleted_at: FieldValue.serverTimestamp(),
             data_snapshot: {
               // Store minimal metadata only
               email: doc.data().email,
@@ -85,7 +86,7 @@ export const cleanupDeletedData = functions.pubsub
       await db.collection('system_alerts').add({
         type: 'gdpr_cleanup_failure',
         error: error instanceof Error ? error.message : String(error),
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        timestamp: FieldValue.serverTimestamp(),
         severity: 'high'
       });
 

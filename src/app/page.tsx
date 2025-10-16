@@ -13,18 +13,9 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import { getCurrentSession } from '@/lib/dal';
 
-export default async function Home() {
-  // Check if user is authenticated
-  const session = await getCurrentSession();
-
-  if (session) {
-    // User is authenticated - redirect to dashboard
-    redirect('/dashboard');
-  }
-
+export default function Home() {
+  // This is a fully static page - middleware handles authenticated user redirects
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       {/* Navigation */}

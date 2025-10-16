@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cleanupDeletedData = void 0;
 const admin = __importStar(require("firebase-admin"));
 const functions = __importStar(require("firebase-functions/v1"));
+const firestore_1 = require("firebase-admin/firestore");
 const db = admin.firestore();
 /**
  * POST-MVP: Scheduled Cloud Function for GDPR compliance
@@ -81,7 +82,7 @@ exports.cleanupDeletedData = functions.pubsub
                     tenant_id: doc.data().tenant_id,
                     deleted_by: doc.data().deleted_by,
                     deleted_at: doc.data().deleted_at,
-                    hard_deleted_at: admin.firestore.FieldValue.serverTimestamp(),
+                    hard_deleted_at: firestore_1.FieldValue.serverTimestamp(),
                     data_snapshot: {
                         // Store minimal metadata only
                         email: doc.data().email,
@@ -108,7 +109,7 @@ exports.cleanupDeletedData = functions.pubsub
         await db.collection('system_alerts').add({
             type: 'gdpr_cleanup_failure',
             error: error instanceof Error ? error.message : String(error),
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            timestamp: firestore_1.FieldValue.serverTimestamp(),
             severity: 'high'
         });
         throw error;

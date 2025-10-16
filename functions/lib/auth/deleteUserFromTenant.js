@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserFromTenant = void 0;
 const admin = __importStar(require("firebase-admin"));
 const functions = __importStar(require("firebase-functions/v1"));
+const firestore_1 = require("firebase-admin/firestore");
 const rateLimiting_1 = require("../utils/rateLimiting");
 const db = admin.firestore();
 /**
@@ -100,7 +101,7 @@ exports.deleteUserFromTenant = functions.https.onCall(async (data, context) => {
             action: 'USER_HARD_DELETED',
             collection: 'users',
             document_id: user_id,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            timestamp: firestore_1.FieldValue.serverTimestamp(),
             changes: {
                 deleted_user_email: userData.email,
                 deletion_type: 'hard'
@@ -117,9 +118,9 @@ exports.deleteUserFromTenant = functions.https.onCall(async (data, context) => {
         // 1. Mark as deleted in Firestore
         await db.collection('users').doc(user_id).update({
             status: 'deleted',
-            deleted_at: admin.firestore.FieldValue.serverTimestamp(),
+            deleted_at: firestore_1.FieldValue.serverTimestamp(),
             deleted_by: context.auth.uid,
-            updated_at: admin.firestore.FieldValue.serverTimestamp()
+            updated_at: firestore_1.FieldValue.serverTimestamp()
         });
         // 2. Revoke custom claims (removes access immediately)
         await admin.auth().setCustomUserClaims(user_id, null);
@@ -130,11 +131,11 @@ exports.deleteUserFromTenant = functions.https.onCall(async (data, context) => {
             action: 'USER_DELETED',
             collection: 'users',
             document_id: user_id,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            timestamp: firestore_1.FieldValue.serverTimestamp(),
             changes: {
                 deleted_user_email: userData.email,
                 deletion_type: 'soft',
-                recoverable_until: admin.firestore.Timestamp.fromMillis(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+                recoverable_until: firestore_1.Timestamp.fromMillis(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
             }
         });
         console.log(`User ${user_id} soft deleted by ${context.auth.uid}`);
