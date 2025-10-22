@@ -46,7 +46,7 @@ users/{user_id}
   ├── tenant_id: string ⚠️ CRITICAL
   ├── email: string
   ├── display_name: string
-  ├── role: 'tenant_admin' | 'user' | 'viewer'
+  ├── role: 'owner' | 'admin' | 'member' | 'guest' | 'viewer'
   ├── status: 'active' | 'invited' | 'deleted'
   ├── created_at: timestamp
   ├── updated_at: timestamp
@@ -65,7 +65,7 @@ users/{user_id}
 **Indexes Required:**
 ```
 - tenant_id + created_at (DESC)
-- tenant_id + role
+- tenant_id + role (supports 5-role system: owner, admin, member, guest, viewer)
 - tenant_id + status
 - tenant_id + email (for quick lookup)
 ```
@@ -74,7 +74,14 @@ users/{user_id}
 - ✅ tenant_id for isolation
 - ✅ Separate profile/preferences
 - ✅ Last login tracking
-- ✅ Role-based access
+- ✅ 5-role hierarchy for access control
+
+**5-Role Hierarchy:**
+1. **owner** - Super admin (manual assignment only), full control
+2. **admin** - Can invite member/guest/viewer, full CRUD on business data
+3. **member** - Full CRUD on business data
+4. **guest** - Resource-specific access via `resource_permissions` map
+5. **viewer** - Read-only access to all tenant data
 
 **Critical Rule:** EVERY user document MUST have tenant_id
 
@@ -88,24 +95,28 @@ invitations/{invitation_id}
   ├── role: string (role to assign)
   ├── invited_by: string (user_id)
   ├── invited_at: timestamp
-  ├── status: 'pending' | 'accepted' | 'expired' | 'cancelled'
+  ├── status: 'pending' | 'accepted' | 'expired'
+  ├── expires_at: timestamp (7 days from creation)
+  ├── invite_token: string (64 hex chars, crypto-secure)
+  ├── invite_link: string (full URL with token)
+  ├── token_used: boolean (one-time use flag)
   ├── accepted_at: timestamp (nullable)
-  ├── expires_at: timestamp
   └── user_id: string (set when accepted)
 ```
 
 **Indexes Required:**
 ```
-- tenant_id + status
+- tenant_id + status + token_used
+- invite_token (for token lookup)
 - email + status
 - expires_at (for cleanup jobs)
 ```
 
-**Why this structure:**
-- ✅ Track invitation lifecycle
-- ✅ Prevent duplicate invites
-- ✅ Audit trail
-- ✅ Auto-expire old invites
+**Security:**
+- ✅ Cryptographically secure tokens (crypto.randomBytes(32))
+- ✅ One-time use via token_used flag
+- ✅ Server-side validation only
+- ✅ 7-day expiration enforced
 
 ---
 

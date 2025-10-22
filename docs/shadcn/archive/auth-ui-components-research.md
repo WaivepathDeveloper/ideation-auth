@@ -1,5 +1,12 @@
 # Authentication UI Components Research
 
+> **📦 Status**: Archived - Implementation Complete (2025-10-07)
+> **📚 Current Docs**: See [../design-tokens.md](../design-tokens.md) and [../shadcn-agents-usage.md](../shadcn-agents-usage.md) for current references
+> **💡 Purpose**: Historical reference for completed Auth UI implementation
+> **🔍 Contains**: Comprehensive research on shadcn/ui components, design tokens (OKLCH), Tailwind v4 integration, and form patterns used for auth UI
+
+---
+
 ## Document Overview
 
 This document provides comprehensive research on shadcn/ui components and design token implementation for the authentication UI system. It includes complete installation commands, component source code, integration patterns, and best practices.

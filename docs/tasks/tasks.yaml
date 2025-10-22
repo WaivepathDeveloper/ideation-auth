@@ -1,0 +1,804 @@
+# Enterprise-Grade Invitation System Implementation
+# Based on Industry Best Practices (Slack, GitHub, Asana, Microsoft Teams)
+# Generated: 2025-10-16
+
+## Project Overview
+description: |
+  Implement complete invitation acceptance flow with secure token-based links.
+  Users can be invited via secure links (no email required for MVP).
+  Invitation links can be copied and shared manually.
+  Email delivery will be added in future phase.
+
+## Research Summary
+industry_standards:
+  - Token-based invitation flow (NOT JWT - too complex)
+  - Secure random tokens (crypto.randomBytes)
+  - One-time use with expiration (7 days)
+  - Email delivery is separate (can be added later)
+  - Show both active users AND pending invitations in UI
+
+security_patterns:
+  - Cryptographically random tokens (32 bytes hex)
+  - Opaque string (no data exposed)
+  - One-time use flag (token_used)
+  - Server-side validation only
+  - HTTPS enforced
+  - Automatic email verification via invitation
+
+comparison_token_vs_jwt:
+  secure_token:
+    use_case: "Invitation links"
+    data_exposure: "Opaque (no data)"
+    complexity: "Simple"
+    industry_standard: "✅ Slack, GitHub, Asana"
+    validation: "DB lookup"
+  jwt:
+    use_case: "Authentication/Authorization"
+    data_exposure: "Decoded payload visible"
+    complexity: "Complex"
+    industry_standard: "Auth tokens only"
+    validation: "Signature verification"
+
+---
+
+## Implementation Phases
+
+### Phase 1: Generate Invitation Links with Secure Tokens
+priority: HIGH
+estimated_time: 2-3 hours
+status: pending
+
+files_to_modify:
+  - path: functions/src/auth/inviteUser.ts
+    changes:
+      - Import Node.js crypto module
+      - Generate secure random token (32 bytes → 64 char hex)
+      - Create full invitation link URL
+      - Add invite_token, invite_link, token_used fields to invitation document
+      - Return invite_link in Cloud Function response
+
+implementation_details:
+  token_generation: |
+    const crypto = require('crypto');
+    const token = crypto.randomBytes(32).toString('hex');
+
+  invitation_fields:
+    invite_token: "64-character hex string"
+    invite_link: "https://your-domain.com/accept-invite?token={token}"
+    token_used: false
+    expires_at: "Timestamp (7 days from creation)"
+
+  base_url_config:
+    dev: "http://localhost:3000"
+    prod: "https://your-production-domain.com"
+    note: "Store in environment variable or Firebase config"
+
+security_checklist:
+  - "✅ Use crypto.randomBytes (cryptographically secure)"
+  - "✅ Generate 32 bytes minimum (64 hex chars)"
+  - "✅ Store token in invitation document"
+  - "✅ Set token_used: false"
+  - "✅ Respect existing 7-day expiration"
+  - "✅ Return invite_link to admin"
+
+testing_steps:
+  - "Call inviteUser function from UI"
+  - "Check Firestore invitation document has invite_token and invite_link"
+  - "Verify token is 64 characters"
+  - "Verify token_used is false"
+  - "Copy invite_link from success message"
+
+---
+
+### Phase 2: Create Invitation Acceptance Page
+priority: HIGH
+estimated_time: 4-5 hours
+status: pending
+
+new_files:
+  - path: src/app/accept-invite/page.tsx
+    type: Server Component
+    purpose: |
+      Token validation and invitation context display.
+      Extracts token from URL, validates server-side, passes data to client.
+
+    implementation:
+      - Extract token from searchParams
+      - Query invitations collection for matching token
+      - Validate: exists, not expired, not used
+      - If valid: render AcceptInviteForm with invitation data
+      - If invalid: render error page with helpful message
+
+    validation_logic: |
+      const invitation = await db.collection('invitations')
+        .where('invite_token', '==', token)
+        .where('token_used', '==', false)
+        .limit(1)
+        .get();
+
+      if (invitation.empty) {
+        return <ErrorPage message="Invalid or expired invitation" />;
+      }
+
+      const data = invitation.docs[0].data();
+
+      // Check expiration
+      if (data.expires_at.toDate() < new Date()) {
+        return <ErrorPage message="Invitation has expired" />;
+      }
+
+      // Pass to client component
+      return <AcceptInviteForm invitation={data} />;
+
+  - path: src/components/auth/AcceptInviteForm.tsx
+    type: Client Component
+    purpose: |
+      Display invitation context and embedded signup form.
+      Handles user signup and marks invitation as accepted.
+
+    ui_elements:
+      invitation_card:
+        - "Organization name"
+        - "Your role: {role}"
+        - "Invited by: {inviter_email}"
+
+      signup_form:
+        - "Email field (pre-filled, disabled)"
+        - "Password field"
+        - "Confirm password field"
+        - "Create Account button"
+
+      loading_states:
+        - "Validating invitation..."
+        - "Creating your account..."
+
+      error_handling:
+        - "Show validation errors"
+        - "Show Firebase auth errors"
+
+    workflow: |
+      1. Display invitation details
+      2. Show signup form with email pre-filled
+      3. On submit:
+         - Validate password match
+         - Call signUpWithEmail(email, password)
+         - After success, mark invitation as accepted
+         - Redirect to /dashboard
+
+      4. Mark invitation as accepted:
+         - Update invitation document
+         - Set token_used: true
+         - Set accepted_at: serverTimestamp()
+         - Set user_id: new_user_uid
+         - Set status: 'accepted'
+
+  - path: src/lib/actions/validate-invitation.ts
+    type: Server Action
+    purpose: |
+      Server action to validate invitation token and return invitation data.
+      Used by accept-invite page for server-side validation.
+
+    function_signature: |
+      export async function validateInvitationToken(token: string): Promise<{
+        valid: boolean;
+        invitation?: InvitationData;
+        error?: string;
+      }>;
+
+    validation_steps:
+      - "Check token format (64 hex chars)"
+      - "Query invitation by token"
+      - "Check token_used === false"
+      - "Check expires_at > now"
+      - "Return invitation data or error"
+
+  - path: src/lib/actions/accept-invitation.ts
+    type: Server Action
+    purpose: |
+      Server action to mark invitation as accepted after successful signup.
+      Called from AcceptInviteForm after user creates account.
+
+    function_signature: |
+      export async function acceptInvitation(
+        token: string,
+        userId: string
+      ): Promise<{ success: boolean; error?: string }>;
+
+    implementation: |
+      // Use TenantFirestoreAdmin with system privileges
+      // Update invitation document:
+      // - token_used: true
+      // - accepted_at: serverTimestamp()
+      // - user_id: userId
+      // - status: 'accepted'
+
+security_checklist:
+  - "✅ Server-side token validation only"
+  - "✅ Never trust client-sent token without verification"
+  - "✅ Use TenantFirestoreAdmin for system operations"
+  - "✅ Validate expiration server-side"
+  - "✅ Mark token as used immediately after signup"
+  - "✅ Email field disabled (pre-filled from invitation)"
+
+testing_steps:
+  - "Copy invite_link from Phase 1"
+  - "Open link in incognito browser"
+  - "Verify invitation context displays correctly"
+  - "Complete signup form"
+  - "Verify redirect to dashboard"
+  - "Check invitation document: token_used = true, accepted_at set"
+  - "Try to reuse same link → Should show error"
+  - "Test with expired invitation → Should show error"
+  - "Test with invalid token → Should show error"
+
+---
+
+### Phase 3: Update onUserCreate Function (Optional Enhancement)
+priority: LOW
+estimated_time: 30 minutes
+status: pending
+
+files_to_modify:
+  - path: functions/src/auth/onUserCreate.ts
+    changes:
+      - Add token_used validation to invitation query
+      - Add logging for invitation acceptance
+
+    note: |
+      MINIMAL CHANGES NEEDED
+      Current email-based lookup already works perfectly.
+      Token validation happens in Phase 2 client-side.
+      This phase is optional safety enhancement.
+
+    optional_enhancement: |
+      // When checking for invitation, add token_used check
+      const inviteSnapshot = await db.collection('invitations')
+        .where('email', '==', email)
+        .where('status', '==', 'pending')
+        .where('token_used', '==', false)  // Extra safety
+        .limit(1)
+        .get();
+
+rationale: |
+  By the time onUserCreate runs, invitation is already validated
+  and marked as used in Phase 2. This is just an extra safety check
+  to ensure no race conditions or manual DB manipulation issues.
+
+testing_steps:
+  - "Complete signup flow from Phase 2"
+  - "Check Cloud Function logs"
+  - "Verify user created successfully"
+  - "Verify invitation found by email"
+  - "Verify custom claims set correctly"
+
+---
+
+### Phase 4: Display Invitations in /users Page
+priority: HIGH
+estimated_time: 3-4 hours
+status: pending
+
+files_to_modify:
+  - path: src/app/(protected)/users/page.tsx
+    changes:
+      - Query both users and invitations collections
+      - Merge results into unified list
+      - Add status indicators
+      - Sort by role hierarchy and status
+
+    implementation: |
+      // Existing query
+      const users = await db.query('users', [
+        { field: 'status', op: '==', value: 'active' }
+      ]);
+
+      // NEW: Query pending invitations
+      const invitations = await db.query('invitations', [
+        { field: 'status', '==', value: 'pending' },
+        { field: 'token_used', op: '==', value: false }
+      ]);
+
+      // Map invitations to User type with status
+      const pendingUsers = invitations.map(inv => ({
+        uid: inv.id,
+        email: inv.email,
+        display_name: inv.email,
+        role: inv.role,
+        status: isPastExpiration(inv.expires_at) ? 'expired' : 'pending',
+        created_at: serializeTimestamp(inv.invited_at),
+        invite_link: inv.invite_link,
+        invited_by: inv.invited_by,
+        expires_at: serializeTimestamp(inv.expires_at)
+      }));
+
+      // Merge and sort
+      const allUsers = [...users, ...pendingUsers].sort((a, b) => {
+        // Sort by role hierarchy first
+        const roleOrder = ROLE_HIERARCHY[a.role] - ROLE_HIERARCHY[b.role];
+        if (roleOrder !== 0) return roleOrder;
+
+        // Then by status (active first)
+        const statusOrder = { active: 0, pending: 1, expired: 2 };
+        return statusOrder[a.status] - statusOrder[b.status];
+      });
+
+  - path: src/components/users/UserTable.tsx
+    changes:
+      - Add status badge column
+      - Add conditional actions for invitations
+      - Add Copy Link button
+      - Add Revoke button
+      - Disable role change for pending users
+
+    ui_enhancements:
+      status_badges:
+        active: "🟢 Active (green badge)"
+        pending: "🟡 Invited - Pending (yellow badge)"
+        expired: "🔴 Invited - Expired (red badge)"
+
+      action_buttons_for_invitations:
+        copy_link:
+          label: "Copy Link"
+          icon: "Link icon"
+          action: "Copy invite_link to clipboard"
+          toast: "Invitation link copied!"
+
+        revoke:
+          label: "Revoke"
+          icon: "X icon"
+          action: "Delete invitation document"
+          confirmation: "Are you sure you want to revoke this invitation?"
+          toast: "Invitation revoked"
+
+        resend:
+          label: "Resend"
+          icon: "Mail icon"
+          disabled: true
+          tooltip: "Email sending coming soon"
+          future: "Will trigger email sending"
+
+      disabled_actions_for_invitations:
+        - "Change Role (grayed out)"
+        - "Remove User (replaced with Revoke)"
+        - "Update Permissions (grayed out)"
+
+  - path: src/lib/actions/revoke-invitation.ts
+    type: New Server Action
+    purpose: |
+      Server action to delete/revoke a pending invitation.
+      Only admins/owners can revoke invitations.
+
+    function_signature: |
+      export async function revokeInvitation(
+        invitationId: string
+      ): Promise<{ success: boolean; error?: string }>;
+
+    implementation: |
+      // Validate user has admin/owner role (from session)
+      // Delete invitation document
+      // Create audit log
+      // Return success
+
+  - path: src/types/user.ts
+    changes:
+      - Update User type to support invitation status
+      - Add optional invitation fields
+
+    type_definition: |
+      export type UserStatus = 'active' | 'inactive' | 'suspended' | 'pending' | 'expired';
+
+      export interface User {
+        uid: string;
+        email: string;
+        display_name: string;
+        role: UserRole;
+        status: UserStatus;
+        created_at: string;
+        last_login?: string;
+        resource_permissions?: Record<string, string[]>;
+
+        // Invitation-specific fields (only for pending/expired)
+        invite_link?: string;
+        invited_by?: string;
+        expires_at?: string;
+      }
+
+security_checklist:
+  - "✅ Only query invitations for current tenant"
+  - "✅ Validate user role before showing invite actions"
+  - "✅ Server-side validation for revoke action"
+  - "✅ Create audit logs for invitation revocation"
+  - "✅ Never expose invitation tokens in UI"
+
+ux_considerations:
+  - Clear visual distinction between active users and invitations
+  - Status badges with color coding
+  - Helpful tooltips on disabled actions
+  - Copy to clipboard with success feedback
+  - Confirmation dialog for destructive actions (revoke)
+  - Expiration countdown for pending invitations
+
+testing_steps:
+  - "Navigate to /users page"
+  - "Verify both active users and pending invitations display"
+  - "Check status badges render correctly"
+  - "Click Copy Link → Verify clipboard and toast"
+  - "Click Revoke → Confirm dialog → Verify deletion"
+  - "Verify expired invitations show red badge"
+  - "Verify role change disabled for pending invitations"
+  - "Check sorting: role hierarchy, then status"
+
+---
+
+## Additional Files to Create
+
+### Utility Functions
+files:
+  - path: src/lib/utils/clipboard.ts
+    purpose: Helper function to copy text to clipboard
+
+  - path: src/lib/utils/date-helpers.ts
+    purpose: Check if invitation expired, format expiration date
+
+### Type Definitions
+files:
+  - path: src/types/invitation.ts
+    purpose: TypeScript interfaces for invitation data
+    content: |
+      export interface InvitationData {
+        id: string;
+        tenant_id: string;
+        email: string;
+        role: UserRole;
+        invited_by: string;
+        invited_at: Timestamp;
+        expires_at: Timestamp;
+        status: 'pending' | 'accepted' | 'expired';
+        invite_token: string;
+        invite_link: string;
+        token_used: boolean;
+        user_id?: string;
+        accepted_at?: Timestamp;
+        resource_permissions?: Record<string, string[]>;
+      }
+
+---
+
+## Environment Configuration
+
+required_env_vars:
+  - name: NEXT_PUBLIC_APP_URL
+    dev_value: "http://localhost:3000"
+    prod_value: "https://your-production-domain.com"
+    purpose: Base URL for generating invitation links
+    location: ".env.local and Firebase config"
+
+firebase_config_updates:
+  - Add APP_URL to Firebase Remote Config (for Cloud Functions)
+  - Update Cloud Functions environment variables
+
+---
+
+## Testing Checklist
+
+### End-to-End Testing Scenarios
+
+scenario_1_happy_path:
+  name: "Admin invites user → User accepts → Joins tenant"
+  steps:
+    - "Admin: Navigate to /users"
+    - "Admin: Fill invite form (email, role)"
+    - "Admin: Submit invitation"
+    - "Admin: Copy invitation link from success message"
+    - "Admin: Share link via Slack/Email/etc"
+    - "User: Click invitation link"
+    - "User: See invitation context (org name, role)"
+    - "User: Complete signup form"
+    - "User: Redirect to dashboard"
+    - "User: Can access tenant resources"
+    - "Admin: Refresh /users page"
+    - "Admin: See user in Active status"
+  expected_db_state:
+    invitations:
+      - "status: 'accepted'"
+      - "token_used: true"
+      - "accepted_at: [timestamp]"
+      - "user_id: [new_user_uid]"
+    users:
+      - "New user document created"
+      - "tenant_id matches invitation"
+      - "role matches invitation"
+    audit_logs:
+      - "INVITATION_CREATED log"
+      - "USER_CREATED log"
+
+scenario_2_copy_and_revoke:
+  name: "Admin copies link, then revokes before acceptance"
+  steps:
+    - "Admin: Create invitation"
+    - "Admin: Copy invitation link"
+    - "Admin: Change mind, click Revoke"
+    - "Admin: Confirm revocation"
+    - "Admin: See invitation removed from list"
+    - "User: Try to use copied link"
+    - "User: See error: Invalid or expired invitation"
+  expected_db_state:
+    invitations:
+      - "Document deleted"
+    audit_logs:
+      - "INVITATION_CREATED log"
+      - "INVITATION_REVOKED log"
+
+scenario_3_expired_invitation:
+  name: "User tries to accept expired invitation"
+  steps:
+    - "Admin: Create invitation"
+    - "Developer: Manually update expires_at to past date"
+    - "User: Click invitation link"
+    - "User: See error: Invitation has expired"
+    - "Admin: See invitation with red 'Expired' badge"
+    - "Admin: Can click Resend (future) or Revoke"
+  expected_db_state:
+    invitations:
+      - "status: 'pending'"
+      - "token_used: false"
+      - "expires_at: [past date]"
+
+scenario_4_reuse_prevention:
+  name: "User tries to reuse invitation link after signup"
+  steps:
+    - "User 1: Accept invitation successfully"
+    - "User 1: Copy invitation link"
+    - "User 2: Try to use same link"
+    - "User 2: See error: Invalid or expired invitation"
+  expected_db_state:
+    invitations:
+      - "token_used: true"
+      - "Cannot be used again"
+
+scenario_5_duplicate_email:
+  name: "User already exists in tenant"
+  steps:
+    - "Admin: Try to invite existing user email"
+    - "Admin: See error: User already exists in organization"
+  expected_db_state:
+    invitations:
+      - "No new invitation created"
+
+scenario_6_multiple_pending_invitations:
+  name: "Multiple invitations in different states"
+  steps:
+    - "Admin: Create 3 invitations"
+    - "User 1: Accept first invitation"
+    - "Developer: Expire second invitation"
+    - "Third invitation: Still pending"
+    - "Admin: Navigate to /users"
+    - "Admin: See all three with correct badges"
+    - "Admin: Active user (green), Expired (red), Pending (yellow)"
+
+### Security Testing
+
+security_tests:
+  - name: "Token guessing prevention"
+    test: "Generate 1000 invitations, verify all tokens are unique"
+    expected: "All tokens cryptographically random and unique"
+
+  - name: "Token reuse prevention"
+    test: "Accept invitation, manually set token_used=false, try again"
+    expected: "onUserCreate rejects due to email already existing"
+
+  - name: "Cross-tenant isolation"
+    test: "User in Tenant A tries to use invitation for Tenant B"
+    expected: "onUserCreate assigns correct tenant from invitation"
+
+  - name: "Expired token handling"
+    test: "Try to accept invitation after expires_at"
+    expected: "Server-side validation rejects"
+
+  - name: "Invalid token handling"
+    test: "Random token in URL"
+    expected: "Error page shown, no data exposed"
+
+  - name: "Role escalation prevention"
+    test: "Modify invitation role in DB after creation"
+    expected: "onUserCreate uses role from DB, not client input"
+
+### Performance Testing
+
+performance_tests:
+  - name: "Large invitation list"
+    test: "Create 100 pending invitations + 100 active users"
+    expected: "/users page loads in <2 seconds"
+
+  - name: "Token validation speed"
+    test: "Validate invitation token"
+    expected: "DB query completes in <500ms"
+
+---
+
+## Documentation Updates
+
+files_to_update:
+  - path: docs/api-reference.md
+    section: Cloud Functions
+    additions:
+      - Document updated inviteUser response with invite_link
+      - Document new server actions (validate-invitation, accept-invitation, revoke-invitation)
+
+  - path: docs/authentication-flow.md
+    section: User Invitation Flow
+    additions:
+      - Add complete invitation acceptance flow diagram
+      - Document token-based invitation process
+      - Document security considerations
+
+  - path: docs/database-schema.md
+    section: Invitations Collection
+    additions:
+      - Document new fields (invite_token, invite_link, token_used)
+      - Update schema requirements
+
+  - path: CLAUDE.md
+    section: Adding New Features
+    additions:
+      - Document invitation flow pattern
+      - Add invitation system to quick reference
+
+---
+
+## Future Enhancements (Post-MVP)
+
+email_integration:
+  priority: MEDIUM
+  description: Send invitation emails automatically
+  tasks:
+    - Integrate email service (SendGrid, AWS SES, Resend)
+    - Create email template with invitation link
+    - Add "Resend" functionality
+    - Track email delivery status
+    - Handle email bounce/failure
+
+  implementation_notes:
+    - Invitation link already exists in DB
+    - Just need to send it via email
+    - Current flow continues to work
+
+invitation_analytics:
+  priority: LOW
+  description: Track invitation metrics
+  tasks:
+    - Invitation acceptance rate
+    - Time to acceptance
+    - Expired invitation tracking
+    - Most common roles invited
+    - Dashboard with metrics
+
+batch_invitations:
+  priority: LOW
+  description: Invite multiple users at once
+  tasks:
+    - CSV upload support
+    - Bulk invitation creation
+    - Progress tracking
+    - Error handling for invalid emails
+
+invitation_reminders:
+  priority: LOW
+  description: Automated reminders for pending invitations
+  tasks:
+    - Cloud Scheduler to check pending invitations
+    - Send reminder email 3 days before expiration
+    - Send reminder email 1 day before expiration
+
+custom_expiration:
+  priority: LOW
+  description: Allow custom expiration periods
+  tasks:
+    - UI option for expiration (1 day, 7 days, 30 days, never)
+    - Validation and enforcement
+    - Admin override capability
+
+---
+
+## Success Metrics
+
+mvp_completion:
+  - "✅ Admin can create invitation with secure link"
+  - "✅ Admin can copy and share link manually"
+  - "✅ User can accept invitation and join tenant"
+  - "✅ Invitation marked as used, prevents reuse"
+  - "✅ Pending invitations visible in /users page"
+  - "✅ Admin can revoke pending invitations"
+  - "✅ Token expires after 7 days"
+  - "✅ All security checks pass"
+  - "✅ Zero cross-tenant data leaks"
+
+quality_gates:
+  - "All TypeScript compilation errors resolved"
+  - "All ESLint warnings resolved"
+  - "All manual test scenarios pass"
+  - "Security checklist 100% complete"
+  - "Documentation updated"
+  - "Code review approved"
+
+---
+
+## Implementation Order (Recommended)
+
+day_1_morning:
+  - "☐ Phase 1: Token generation (2-3 hours)"
+  - "☐ Test token generation in emulator"
+  - "☐ Deploy to emulator, test invite flow"
+
+day_1_afternoon:
+  - "☐ Phase 2: Accept invite page (4-5 hours)"
+  - "☐ Create accept-invite page and form component"
+  - "☐ Create server actions for validation"
+  - "☐ Test complete acceptance flow"
+
+day_2_morning:
+  - "☐ Phase 4: Display invitations (3-4 hours)"
+  - "☐ Update /users page to query both collections"
+  - "☐ Update UserTable component with status badges"
+  - "☐ Implement copy link functionality"
+  - "☐ Implement revoke functionality"
+
+day_2_afternoon:
+  - "☐ Phase 3: onUserCreate enhancement (30 min)"
+  - "☐ End-to-end testing all scenarios"
+  - "☐ Security testing"
+  - "☐ Performance testing"
+  - "☐ Documentation updates"
+  - "☐ Code review and cleanup"
+
+---
+
+## Notes and Considerations
+
+architecture_decisions:
+  - "Use secure random tokens, NOT JWT (industry standard for invitations)"
+  - "Token validation happens server-side only"
+  - "Email delivery is decoupled from invitation creation"
+  - "One-time use enforced via token_used flag"
+  - "Expiration enforced via expires_at timestamp"
+
+security_principles:
+  - "Never trust client-sent data"
+  - "Always validate server-side"
+  - "Use TenantFirestoreAdmin for system operations"
+  - "Audit all invitation actions"
+  - "Enforce tenant isolation"
+
+code_quality:
+  - "TypeScript strict mode"
+  - "Comprehensive error handling"
+  - "User-friendly error messages"
+  - "Loading states for all async operations"
+  - "Consistent naming conventions"
+
+deployment_strategy:
+  - "Test thoroughly in emulator first"
+  - "Deploy Cloud Functions first (Phase 1)"
+  - "Deploy frontend pages second (Phase 2)"
+  - "Update existing pages last (Phase 4)"
+  - "Monitor error logs after each phase"
+
+---
+
+## Contact and Support
+
+questions:
+  - "Check docs/authentication-flow.md for flow diagrams"
+  - "Check docs/api-reference.md for API details"
+  - "Check Firebase Console for invitation documents"
+  - "Check Cloud Function logs for debugging"
+
+troubleshooting:
+  - "Token not generating → Check crypto import in Cloud Function"
+  - "Link not working → Check BASE_URL environment variable"
+  - "Invitation not found → Check token_used flag"
+  - "User not joining tenant → Check onUserCreate logs"
+
+---
+
+# Ready to implement tomorrow! 🚀

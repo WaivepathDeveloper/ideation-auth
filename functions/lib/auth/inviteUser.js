@@ -38,6 +38,7 @@ const admin = __importStar(require("firebase-admin"));
 const functions = __importStar(require("firebase-functions/v1"));
 const firestore_1 = require("firebase-admin/firestore");
 const rateLimiting_1 = require("../utils/rateLimiting");
+const crypto = __importStar(require("crypto"));
 const db = admin.firestore();
 /**
  * Callable Cloud Function: Invite user to tenant
@@ -104,6 +105,12 @@ exports.inviteUser = functions.https.onCall(async (data, context) => {
     if (currentUsers.data().count >= maxUsers) {
         throw new functions.https.HttpsError('resource-exhausted', `Your organization has reached the maximum user limit of ${maxUsers}`);
     }
+    // Generate secure random token (32 bytes = 64 hex characters)
+    const inviteToken = crypto.randomBytes(32).toString('hex');
+    // Get base URL from environment (fallback for development)
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    // Build invitation link
+    const inviteLink = `${baseUrl}/accept-invite?token=${inviteToken}`;
     // Create invitation
     const inviteData = {
         tenant_id,
@@ -112,7 +119,10 @@ exports.inviteUser = functions.https.onCall(async (data, context) => {
         invited_by: context.auth.uid,
         invited_at: firestore_1.FieldValue.serverTimestamp(),
         status: 'pending',
-        expires_at: firestore_1.Timestamp.fromMillis(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+        expires_at: firestore_1.Timestamp.fromMillis(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+        invite_token: inviteToken,
+        invite_link: inviteLink,
+        token_used: false
     };
     // Include resource_permissions for guest role
     if (role === 'guest' && resource_permissions) {
@@ -136,7 +146,8 @@ exports.inviteUser = functions.https.onCall(async (data, context) => {
     return {
         success: true,
         invitationId: inviteRef.id,
-        message: `Invitation sent to ${email}`
+        inviteLink: inviteLink,
+        message: `Invitation created for ${email}. Share the invitation link to get started.`
     };
 });
 //# sourceMappingURL=inviteUser.js.map

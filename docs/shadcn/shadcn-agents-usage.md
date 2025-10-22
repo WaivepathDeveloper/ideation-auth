@@ -1,5 +1,24 @@
 # Shadcn Agents Usage Guide
 
+## Table of Contents
+1. [Overview](#overview)
+2. [The 4 Shadcn Agents](#the-4-shadcn-agents)
+   - [shadcn-requirements-analyzer](#1--shadcn-requirements-analyzer)
+   - [shadcn-component-researcher](#2--shadcn-component-researcher)
+   - [shadcn-quick-helper](#3--shadcn-quick-helper)
+   - [shadcn-implementation-builder](#4--shadcn-implementation-builder)
+3. [Complete Workflow Examples](#complete-workflow-examples)
+4. [Agent Chaining Patterns](#agent-chaining-patterns)
+5. [Integration with MCP Server](#integration-with-mcp-server)
+6. [Project-Specific Integration](#project-specific-integration)
+   - [Design Token Integration](#design-token-integration)
+   - [Security Integration](#security-integration)
+7. [Best Practices](#best-practices)
+8. [Common Pitfalls](#common-pitfalls)
+9. [Troubleshooting](#troubleshooting)
+
+---
+
 This guide explains how to use Claude Code's shadcn agents with the MCP server to build production-ready UI components.
 
 ## Overview
@@ -69,7 +88,7 @@ Components Needed:
 
 ---
 
-### 2. =⁄ shadcn-component-researcher
+### 2. =ÔøΩ shadcn-component-researcher
 
 **Purpose:** Researches specific shadcn components for implementation details
 
@@ -119,7 +138,7 @@ Path: components/ui/combobox/index.tsx
 
 ---
 
-### 3. ° shadcn-quick-helper
+### 3. ÔøΩ shadcn-quick-helper
 
 **Purpose:** Rapid assistance for adding single components
 
@@ -165,7 +184,7 @@ import { CalendarProvider, CalendarBody } from '@/components/ui/calendar'
 
 ---
 
-### 4. <◊ shadcn-implementation-builder
+### 4. <ÔøΩ shadcn-implementation-builder
 
 **Purpose:** Builds production-ready implementations with TypeScript, state management, validation
 
@@ -279,7 +298,7 @@ Output: Instant installation + basic usage
 
 | Scenario | Agent(s) to Use | Workflow |
 |----------|----------------|----------|
-| Complex multi-component feature | Analyzer í Researcher í Builder | Full pipeline |
+| Complex multi-component feature | Analyzer ÔøΩ Researcher ÔøΩ Builder | Full pipeline |
 | "What components do I need?" | Analyzer only | Planning phase |
 | "How does X component work?" | Researcher only | Research only |
 | "Add a button" | Quick Helper | Single component |
@@ -337,6 +356,151 @@ Task(subagent_type: "shadcn-component-researcher", prompt: "Research X, Y, Z")
    - Integrates components based on real implementations
 
 **Key Advantage:** MCP ensures agents always have **up-to-date, accurate** component data from the official shadcn registry.
+
+---
+
+## Project-Specific Integration
+
+This section covers how to integrate shadcn components with this project's specific patterns: TenantFirestore, design tokens, and 6-layer security.
+
+### Design Token Integration
+
+**CRITICAL**: All UI components MUST use design tokens from `src/styles/tokens.css`.
+
+‚úÖ **Correct Pattern**:
+```tsx
+// Builder agent should generate this
+<Button className="bg-primary text-primary-foreground">
+  Submit
+</Button>
+
+<Alert className="border-destructive bg-destructive/10">
+  Error
+</Alert>
+
+<Card className="shadow-lg rounded-md">
+  Content
+</Card>
+```
+
+‚ùå **Incorrect Pattern**:
+```tsx
+// Never hardcode colors - builder agent should NOT generate this
+<Button className="bg-blue-500 text-white">
+<Alert className="border-red-500 bg-red-50">
+<Card className="shadow-xl rounded-lg">
+```
+
+**When using implementation-builder agent**, always specify:
+```typescript
+Task(
+  subagent_type: "shadcn-implementation-builder",
+  prompt: "Build [component] using:
+    - Design tokens from src/styles/tokens.css (MANDATORY)
+    - NO hardcoded Tailwind color classes
+    - Use CSS variables: bg-primary, text-destructive, border-input, etc.
+    - Reference design-tokens.md for available tokens"
+)
+```
+
+**Available Tokens**:
+| Token | Usage |
+|-------|-------|
+| `bg-primary`, `text-primary-foreground` | Primary actions |
+| `bg-destructive`, `text-destructive-foreground` | Errors, deletions |
+| `bg-success`, `text-success-foreground` | Success states |
+| `bg-muted`, `text-muted-foreground` | Subtle UI |
+| `border-input`, `focus:ring-ring` | Form inputs |
+| `shadow-sm/md/lg` | Card elevation |
+
+**See**: [design-tokens.md](design-tokens.md) for complete token reference.
+
+---
+
+### Security Integration
+
+**TenantFirestore Pattern** (for components with data):
+
+```typescript
+// When requesting implementation-builder to create server components:
+Task(
+  subagent_type: "shadcn-implementation-builder",
+  prompt: "Build user list table using:
+    - TenantFirestore for data operations (CRITICAL)
+    - getCurrentSession() for auth validation
+    - Server Component pattern
+    - Auto tenant_id filtering via tenantDB.query()
+    Include TypeScript types and error handling"
+)
+```
+
+**Generated Server Component Pattern**:
+```typescript
+import { getCurrentSession } from '@/lib/dal'
+import { TenantFirestore } from '@/lib/TenantFirestore'
+import { redirect } from 'next/navigation'
+
+export default async function UserListPage() {
+  // 1. Validate auth + get session
+  const session = await getCurrentSession()
+  if (!session) redirect('/login')
+
+  // 2. Initialize TenantFirestore with tenant isolation
+  const tenantDB = new TenantFirestore(session.tenant_id, session.user_id)
+
+  // 3. Query with automatic tenant_id filtering
+  const users = await tenantDB.query('users', [])
+
+  // 4. Pass to client component
+  return <UserTable users={users} currentRole={session.role} />
+}
+```
+
+**Role-Based UI Pattern**:
+
+```typescript
+// Client components with role-based access control
+'use client'
+
+interface UserActionsProps {
+  currentRole: UserRole  // From server component (source of truth)
+  targetUser: User
+}
+
+export function UserActions({ currentRole, targetUser }: UserActionsProps) {
+  // Conditional logic based on 5-role hierarchy
+  const canEdit = ['owner', 'admin', 'member'].includes(currentRole)
+  const canDelete = ['owner', 'admin'].includes(currentRole)
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {canEdit && (
+          <DropdownMenuItem>Edit User</DropdownMenuItem>
+        )}
+        {canDelete && (
+          <DropdownMenuItem className="text-destructive">
+            Delete User
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+```
+
+**Key Integration Points**:
+1. **Server Components**: Use TenantFirestore for data fetching
+2. **Role Passing**: Always pass role from server to client components
+3. **UI Enforcement**: Show/hide actions based on role (defense layer)
+4. **Server Enforcement**: Cloud Functions validate role (primary defense)
+
+**See**: [shadcn-workflow.md](shadcn-workflow.md) for complete integration patterns.
 
 ---
 
@@ -398,12 +562,12 @@ Task(
 ### L Pitfall 1: Skipping Requirements Analysis
 ```typescript
 // Bad: Jump straight to implementation
-"Build a dashboard" í Builder agent í Missing components
+"Build a dashboard" ÔøΩ Builder agent ÔøΩ Missing components
 ```
 
 **Solution:** Always analyze first
 ```typescript
-"Build dashboard" í Analyzer í Researcher í Builder
+"Build dashboard" ÔøΩ Analyzer ÔøΩ Researcher ÔøΩ Builder
 ```
 
 ---
@@ -578,4 +742,4 @@ Task(
 )
 ```
 
-Happy building! =Ä
+Happy building! =ÔøΩ

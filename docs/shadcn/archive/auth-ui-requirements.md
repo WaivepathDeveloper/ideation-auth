@@ -1,5 +1,12 @@
 # Authentication UI Requirements
 
+> **📦 Status**: Archived - Implementation Complete (2025-10-07)
+> **📚 Current Docs**: See [../shadcn-workflow.md](../shadcn-workflow.md) for active workflow
+> **💡 Purpose**: Historical reference for completed Auth UI implementation
+> **🔍 Contains**: Original requirements document for design tokens, shadcn components, validation layer, and auth form integration
+
+---
+
 ## Feature Overview
 
 Secure, multi-tenant Firebase authentication system with a comprehensive design tokens system, reusable shadcn-based components, and seamless integration with existing TenantAuthContext backend.

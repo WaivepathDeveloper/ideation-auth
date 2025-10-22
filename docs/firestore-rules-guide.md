@@ -23,14 +23,50 @@ service cloud.firestore {
       return request.auth.token.tenant_id;
     }
     
-    // Helper: Check if user is tenant admin
-    function isTenantAdmin() {
-      return request.auth.token.role == 'tenant_admin';
-    }
-    
     // Helper: Verify document belongs to user's tenant
     function belongsToTenant(tenant_id) {
       return tenant_id == getTenantId();
+    }
+
+    // ===== ROLE HELPER FUNCTIONS (5-Role Hierarchy) =====
+    function isOwner() {
+      return request.auth != null
+        && request.auth.token.role == 'owner';
+    }
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.role == 'admin';
+    }
+
+    function isMember() {
+      return request.auth != null
+        && request.auth.token.role == 'member';
+    }
+
+    function isGuest() {
+      return request.auth != null
+        && request.auth.token.role == 'guest';
+    }
+
+    function isViewer() {
+      return request.auth != null
+        && request.auth.token.role == 'viewer';
+    }
+
+    function canManageUsers() {
+      return isOwner() || isAdmin();
+    }
+
+    function canEditData() {
+      return isOwner() || isAdmin() || isMember();
+    }
+
+    function hasResourceAccess(collection, docId) {
+      return isGuest()
+        && request.auth.token.resource_permissions != null
+        && request.auth.token.resource_permissions[collection] != null
+        && docId in request.auth.token.resource_permissions[collection];
     }
   }
 }
@@ -41,6 +77,23 @@ service cloud.firestore {
 - ✅ Consistent security checks
 - ✅ Easier to update rules
 - ✅ Less chance of mistakes
+
+---
+
+## 🎭 5-Role System Overview
+
+| Role | Permissions | Helper Function |
+|------|-------------|-----------------|
+| **owner** | Full control, can transfer ownership | `isOwner()` |
+| **admin** | Manage users (invite/update), full CRUD on data | `isAdmin()` |
+| **member** | Full CRUD on business data | `isMember()` |
+| **guest** | Selective resource access via permissions | `isGuest()` + `hasResourceAccess()` |
+| **viewer** | Read-only access to all tenant data | `isViewer()` |
+
+**Composite Helper Functions:**
+- `canManageUsers()` - Returns true for owner OR admin (can invite users, change roles)
+- `canEditData()` - Returns true for owner, admin, OR member (can create/update/delete data)
+- `hasResourceAccess(collection, docId)` - Returns true if guest has permission for specific resource
 
 ---
 
@@ -58,9 +111,9 @@ match /users/{userId} {
   // Create: Only during signup (handled by Cloud Function)
   allow create: if false; // Block client-side creates
   
-  // Update: Only own profile OR tenant admin
-  allow update: if isAuthenticated() 
-    && (request.auth.uid == userId || isTenantAdmin())
+  // Update: Only own profile OR owner/admin
+  allow update: if isAuthenticated()
+    && (request.auth.uid == userId || canManageUsers())
     && belongsToTenant(resource.data.tenant_id)
     && request.resource.data.tenant_id == resource.data.tenant_id; // Can't change tenant
 }
@@ -80,12 +133,12 @@ match /users/{userId} {
 ```javascript
 match /tenants/{tenantId} {
   // Read: Only if user belongs to this tenant
-  allow read: if isAuthenticated() 
+  allow read: if isAuthenticated()
     && getTenantId() == tenantId;
-  
-  // Update: Only tenant_admin
-  allow update: if isAuthenticated() 
-    && isTenantAdmin()
+
+  // Update: Only owner/admin
+  allow update: if isAuthenticated()
+    && canManageUsers()
     && getTenantId() == tenantId
     && request.resource.data.created_by == resource.data.created_by; // Can't change creator
   
@@ -115,16 +168,16 @@ match /posts/{postId} {
     && request.resource.data.tenant_id == getTenantId()
     && request.resource.data.created_by == request.auth.uid;
   
-  // Update: Same tenant + creator OR admin
-  allow update: if isAuthenticated() 
+  // Update: Same tenant + creator OR owner/admin
+  allow update: if isAuthenticated()
     && belongsToTenant(resource.data.tenant_id)
     && belongsToTenant(request.resource.data.tenant_id) // Can't change tenant
-    && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+    && (resource.data.created_by == request.auth.uid || canManageUsers());
   
-  // Delete: Creator OR admin
-  allow delete: if isAuthenticated() 
+  // Delete: Creator OR owner/admin
+  allow delete: if isAuthenticated()
     && belongsToTenant(resource.data.tenant_id)
-    && (resource.data.created_by == request.auth.uid || isTenantAdmin());
+    && (resource.data.created_by == request.auth.uid || canManageUsers());
 }
 ```
 
@@ -141,22 +194,22 @@ match /posts/{postId} {
 
 ```javascript
 match /invitations/{inviteId} {
-  // Read: Tenant admins OR invited user (by email)
-  allow read: if isAuthenticated() 
-    && (isTenantAdmin() && belongsToTenant(resource.data.tenant_id))
-    || request.auth.token.email == resource.data.email;
-  
-  // Create: Only tenant_admin
-  allow create: if isAuthenticated() 
-    && isTenantAdmin()
+  // Read: Owner/admin OR invited user (by email)
+  allow read: if isAuthenticated()
+    && ((canManageUsers() && belongsToTenant(resource.data.tenant_id))
+    || request.auth.token.email == resource.data.email);
+
+  // Create: Only owner/admin
+  allow create: if isAuthenticated()
+    && canManageUsers()
     && request.resource.data.tenant_id == getTenantId();
   
   // Update: Only Cloud Functions (mark as accepted)
   allow update: if false;
   
-  // Delete: Only tenant_admin or expired
-  allow delete: if isAuthenticated() 
-    && isTenantAdmin()
+  // Delete: Only owner/admin or expired
+  allow delete: if isAuthenticated()
+    && canManageUsers()
     && belongsToTenant(resource.data.tenant_id);
 }
 ```

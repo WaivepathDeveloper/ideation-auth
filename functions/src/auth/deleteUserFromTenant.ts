@@ -27,11 +27,11 @@ export const deleteUserFromTenant = functions.https.onCall(async (data: DeleteUs
   // Rate limiting
   await checkAPIRateLimit(context.auth.uid);
 
-  // Permission check - only tenant admins
-  if (context.auth.token.role !== 'tenant_admin') {
+  // Permission check - only admins and owners
+  if (context.auth.token.role !== 'admin' && context.auth.token.role !== 'owner') {
     throw new functions.https.HttpsError(
       'permission-denied',
-      'Only tenant administrators can delete users'
+      'Only Admins and Owners can delete users'
     );
   }
 

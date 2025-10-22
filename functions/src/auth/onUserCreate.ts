@@ -27,9 +27,11 @@ export const onUserCreate = functions.auth.user().onCreate(async (user) => {
 
   try {
     // Step 1: Check for pending invitation
+    // Added token_used check for extra safety (prevents race conditions)
     const inviteSnapshot = await db.collection('invitations')
       .where('email', '==', email)
       .where('status', '==', 'pending')
+      .where('token_used', '==', false)
       .limit(1)
       .get();
 

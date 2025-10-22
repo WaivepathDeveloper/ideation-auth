@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v1';
 import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 import { checkAPIRateLimit } from '../utils/rateLimiting';
+import * as crypto from 'crypto';
 
 const db = admin.firestore();
 
@@ -118,6 +119,15 @@ export const inviteUser = functions.https.onCall(async (data: InviteUserData, co
     );
   }
 
+  // Generate secure random token (32 bytes = 64 hex characters)
+  const inviteToken = crypto.randomBytes(32).toString('hex');
+
+  // Get base URL from environment (fallback for development)
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+  // Build invitation link
+  const inviteLink = `${baseUrl}/accept-invite?token=${inviteToken}`;
+
   // Create invitation
   const inviteData: any = {
     tenant_id,
@@ -126,7 +136,10 @@ export const inviteUser = functions.https.onCall(async (data: InviteUserData, co
     invited_by: context.auth.uid,
     invited_at: FieldValue.serverTimestamp(),
     status: 'pending',
-    expires_at: Timestamp.fromMillis(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+    expires_at: Timestamp.fromMillis(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    invite_token: inviteToken,
+    invite_link: inviteLink,
+    token_used: false
   };
 
   // Include resource_permissions for guest role
@@ -155,6 +168,7 @@ export const inviteUser = functions.https.onCall(async (data: InviteUserData, co
   return {
     success: true,
     invitationId: inviteRef.id,
-    message: `Invitation sent to ${email}`
+    inviteLink: inviteLink,
+    message: `Invitation created for ${email}. Share the invitation link to get started.`
   };
 });
