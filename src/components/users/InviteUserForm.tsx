@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, UserPlus, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, UserPlus, CheckCircle2, AlertCircle, Info } from 'lucide-react';
 import { inviteUser, getErrorMessage } from '@/lib/functions/user-management';
 import type { UserRole } from '@/types/roles';
 
@@ -123,28 +123,48 @@ export function InviteUserForm({ currentUserRole }: InviteUserFormProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <Card style={{
+      border: '1px solid hsl(var(--border))',
+      boxShadow: 'var(--shadow-md)',
+      borderRadius: 'var(--radius-xl)'
+    }}>
+      <CardHeader style={{
+        paddingBottom: 'var(--spacing-lg)'
+      }}>
+        <CardTitle className="flex items-center" style={{
+          gap: 'var(--spacing-sm)',
+          marginBottom: 'var(--spacing-xs)'
+        }}>
           <UserPlus className="h-5 w-5" />
           Invite User
         </CardTitle>
-        <CardDescription>
-          {currentUserRole === 'owner'
-            ? 'Invite admins, members, guests, or viewers to your organization'
-            : 'Invite members, guests, or viewers to your team'}
+        <CardDescription style={{
+          marginTop: 'var(--spacing-xs)'
+        }}>
+          Invite members, guests, or viewers to your team
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
-        <CardContent style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+        <CardContent style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--spacing-xl)',
+          paddingTop: 'var(--spacing-lg)',
+          paddingBottom: 'var(--spacing-xl)'
+        }}>
           {/* Success Alert */}
           {success && (
             <Alert style={{
               backgroundColor: 'hsl(var(--success) / 0.1)',
-              borderColor: 'hsl(var(--success))'
+              borderColor: 'hsl(var(--success))',
+              padding: 'var(--spacing-md)',
+              borderRadius: 'var(--radius-lg)'
             }}>
               <CheckCircle2 className="h-4 w-4" style={{ color: 'hsl(var(--success))' }} />
-              <AlertDescription style={{ color: 'hsl(var(--success))' }}>
+              <AlertDescription style={{
+                color: 'hsl(var(--success))',
+                paddingLeft: 'var(--spacing-sm)'
+              }}>
                 {success}
               </AlertDescription>
             </Alert>
@@ -152,126 +172,226 @@ export function InviteUserForm({ currentUserRole }: InviteUserFormProps) {
 
           {/* Error Alert */}
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" style={{
+              padding: 'var(--spacing-md)',
+              borderRadius: 'var(--radius-lg)'
+            }}>
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
+              <AlertDescription style={{
+                paddingLeft: 'var(--spacing-sm)'
+              }}>
+                {error}
+              </AlertDescription>
             </Alert>
           )}
 
-          {/* Email Field */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <Label htmlFor="email">Email Address *</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="user@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
-              required
-              aria-invalid={!!fieldErrors.email}
-              aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-            />
-            {fieldErrors.email && (
-              <p id="email-error" style={{
-                fontSize: '0.875rem',
-                color: 'hsl(var(--destructive))',
-                marginTop: 'var(--spacing-xs)'
+          {/* Email & Role Fields - Responsive Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: 'var(--spacing-lg)'
+          }}>
+            {/* Email Field */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--spacing-sm)'
+            }}>
+              <Label htmlFor="email" style={{
+                fontWeight: 500,
+                color: 'hsl(var(--foreground))',
+                marginBottom: 'var(--spacing-xs)'
               }}>
-                {fieldErrors.email}
-              </p>
-            )}
-          </div>
-
-          {/* Role Selector */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <Label htmlFor="role">Role *</Label>
-            <Select
-              value={role}
-              onValueChange={(value) => setRole(value as UserRole)}
-              disabled={loading}
-              required
-            >
-              <SelectTrigger id="role" aria-invalid={!!fieldErrors.role}>
-                <SelectValue placeholder="Select a role" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableRoles.map((r) => (
-                  <SelectItem key={r} value={r}>
-                    {r.charAt(0).toUpperCase() + r.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {fieldErrors.role && (
-              <p style={{
-                fontSize: '0.875rem',
-                color: 'hsl(var(--destructive))',
-                marginTop: 'var(--spacing-xs)'
-              }}>
-                {fieldErrors.role}
-              </p>
-            )}
-          </div>
-
-          {/* Resource Permissions (Guest Only) */}
-          {role === 'guest' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-              <Label htmlFor="permissions">Resource Permissions (JSON) *</Label>
-              <textarea
-                id="permissions"
-                placeholder='{"posts": ["post_id_1", "post_id_2"], "projects": ["project_id_3"]}'
-                value={resourcePermissions}
-                onChange={(e) => setResourcePermissions(e.target.value)}
+                Email Address <span style={{ color: 'hsl(var(--destructive))' }}>*</span>
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="user@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
                 required
-                rows={4}
+                aria-invalid={!!fieldErrors.email}
+                aria-describedby={fieldErrors.email ? 'email-error' : 'email-help'}
                 style={{
-                  width: '100%',
-                  padding: 'var(--spacing-sm)',
-                  borderRadius: 'var(--radius)',
-                  border: '1px solid hsl(var(--border))',
-                  backgroundColor: 'hsl(var(--background))',
-                  color: 'hsl(var(--foreground))',
-                  fontFamily: 'monospace',
-                  fontSize: '0.875rem'
+                  transition: 'border-color var(--transition-normal) var(--transition-ease)'
                 }}
-                aria-invalid={!!fieldErrors.resource_permissions}
-                aria-describedby="permissions-help"
               />
-              <p id="permissions-help" style={{
-                fontSize: '0.75rem',
-                color: 'hsl(var(--muted-foreground))'
+              {!fieldErrors.email && (
+                <p id="email-help" style={{
+                  fontSize: '0.75rem',
+                  color: 'hsl(var(--muted-foreground))'
+                }}>
+                  We'll send an invitation link to this address
+                </p>
+              )}
+              {fieldErrors.email && (
+                <p id="email-error" style={{
+                  fontSize: '0.875rem',
+                  color: 'hsl(var(--destructive))'
+                }}>
+                  {fieldErrors.email}
+                </p>
+              )}
+            </div>
+
+            {/* Role Selector */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--spacing-sm)'
+            }}>
+              <Label htmlFor="role" style={{
+                fontWeight: 500,
+                color: 'hsl(var(--foreground))',
+                marginBottom: 'var(--spacing-xs)'
               }}>
-                Specify which resources this guest can access. Format: {`{"collection": ["doc_id1", "doc_id2"]}`}
-              </p>
-              {fieldErrors.resource_permissions && (
+                Role <span style={{ color: 'hsl(var(--destructive))' }}>*</span>
+              </Label>
+              <Select
+                value={role}
+                onValueChange={(value) => setRole(value as UserRole)}
+                disabled={loading}
+                required
+              >
+                <SelectTrigger id="role" aria-invalid={!!fieldErrors.role}>
+                  <SelectValue placeholder="Select access level" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableRoles.map((r) => (
+                    <SelectItem key={r} value={r}>
+                      {r.charAt(0).toUpperCase() + r.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {!fieldErrors.role && (
+                <p style={{
+                  fontSize: '0.75rem',
+                  color: 'hsl(var(--muted-foreground))'
+                }}>
+                  Select appropriate access level for this user
+                </p>
+              )}
+              {fieldErrors.role && (
                 <p style={{
                   fontSize: '0.875rem',
                   color: 'hsl(var(--destructive))'
                 }}>
-                  {fieldErrors.resource_permissions}
+                  {fieldErrors.role}
                 </p>
               )}
             </div>
+          </div>
+
+          {/* Resource Permissions (Guest Only) */}
+          {role === 'guest' && (
+            <Alert style={{
+              backgroundColor: 'hsl(var(--accent) / 0.5)',
+              borderColor: 'hsl(var(--border))',
+              borderRadius: 'var(--radius-lg)',
+              padding: 'var(--spacing-lg)',
+              marginTop: 'var(--spacing-md)'
+            }}>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--spacing-md)'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-sm)'
+                }}>
+                  <Info className="h-4 w-4" style={{ color: 'hsl(var(--primary))' }} />
+                  <Label htmlFor="permissions" style={{
+                    fontWeight: 500,
+                    color: 'hsl(var(--foreground))',
+                    margin: 0
+                  }}>
+                    Resource Permissions (JSON) <span style={{ color: 'hsl(var(--destructive))' }}>*</span>
+                  </Label>
+                </div>
+                <AlertDescription style={{ marginTop: 'var(--spacing-xs)' }}>
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: 'hsl(var(--muted-foreground))',
+                    marginBottom: 'var(--spacing-md)',
+                    lineHeight: '1.5'
+                  }}>
+                    Guest users need specific resource access. Define which collections and documents they can access.
+                  </p>
+                  <textarea
+                    id="permissions"
+                    placeholder='{"posts": ["post_123", "post_456"], "projects": ["proj_789"]}'
+                    value={resourcePermissions}
+                    onChange={(e) => setResourcePermissions(e.target.value)}
+                    disabled={loading}
+                    required
+                    rows={5}
+                    style={{
+                      width: '100%',
+                      padding: 'var(--spacing-md)',
+                      borderRadius: 'var(--radius)',
+                      border: '1px solid hsl(var(--border))',
+                      backgroundColor: 'hsl(var(--background))',
+                      color: 'hsl(var(--foreground))',
+                      fontFamily: 'var(--font-mono), monospace',
+                      fontSize: '0.875rem',
+                      lineHeight: '1.5',
+                      transition: 'border-color var(--transition-normal) var(--transition-ease)'
+                    }}
+                    aria-invalid={!!fieldErrors.resource_permissions}
+                    aria-describedby="permissions-help"
+                  />
+                  <p id="permissions-help" style={{
+                    fontSize: '0.75rem',
+                    color: 'hsl(var(--muted-foreground))',
+                    marginTop: 'var(--spacing-sm)',
+                    lineHeight: '1.5'
+                  }}>
+                    Format: {`{"collection_name": ["document_id1", "document_id2"]}`}
+                  </p>
+                  {fieldErrors.resource_permissions && (
+                    <p style={{
+                      fontSize: '0.875rem',
+                      color: 'hsl(var(--destructive))',
+                      marginTop: 'var(--spacing-sm)'
+                    }}>
+                      {fieldErrors.resource_permissions}
+                    </p>
+                  )}
+                </AlertDescription>
+              </div>
+            </Alert>
           )}
         </CardContent>
 
-        <CardFooter>
+        <CardFooter style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          paddingTop: 'var(--spacing-xl)',
+          paddingBottom: 'var(--spacing-lg)',
+          borderTop: '1px solid hsl(var(--border))',
+          marginTop: 'var(--spacing-md)'
+        }}>
           <Button
             type="submit"
             disabled={loading || !email || !role}
             style={{
-              width: '100%',
+              minWidth: '180px',
+              padding: 'var(--spacing-sm) var(--spacing-lg)',
               display: 'flex',
               alignItems: 'center',
-              gap: 'var(--spacing-xs)'
+              gap: 'var(--spacing-sm)',
+              transition: 'all var(--transition-normal) var(--transition-ease)'
             }}
           >
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Sending Invitation...
+                Sending...
               </>
             ) : (
               <>

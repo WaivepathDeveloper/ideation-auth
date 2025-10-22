@@ -1,11 +1,15 @@
 /**
- * User Management Page (Server Component)
+ * Settings Page (Server Component)
  *
- * Displays a list of users in the current tenant and allows admins/owners to:
- * - Invite new users
- * - Change user roles
- * - Remove users from tenant
- * - Update guest permissions
+ * Main settings page with tabs for different configuration sections:
+ * - AI Configuration (placeholder)
+ * - User Permissions (active - user management)
+ * - Notifications (placeholder)
+ *
+ * Displays:
+ * - Current user profile card
+ * - Users/Roles view toggle
+ * - User management table (invite, change roles, remove)
  *
  * Access: Owner and Admin only
  */
@@ -15,9 +19,7 @@ import { redirect } from 'next/navigation';
 import { TenantFirestoreAdmin, type QueryResult } from '@/lib/server/TenantFirestoreAdmin';
 import { serializeTimestamp } from '@/lib/server/serializers';
 import { RoleGuard } from '@/components/auth/RoleGuard';
-import { InviteUserForm } from '@/components/users/InviteUserForm';
-import { UserTable } from '@/components/users/UserTable';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { SettingsPageClient } from '@/components/settings/SettingsPageClient';
 import type { UserRole } from '@/types/roles';
 import { ROLE_HIERARCHY } from '@/types/roles';
 import type { User } from '@/types/user';
@@ -81,6 +83,25 @@ export default async function UsersPage() {
     };
   });
 
+  // Fetch current user's full data for profile card
+  const currentUserData = await db.query('users', [
+    { field: '__name__', op: '==', value: session.user_id }
+  ]);
+
+  const currentUser = currentUserData[0] ? {
+    uid: session.user_id,
+    email: (currentUserData[0].email as string) || session.email,
+    display_name: (currentUserData[0].display_name as string) || session.email || 'User',
+    photoURL: (currentUserData[0].photoURL as string) || null,
+    role: session.role as UserRole,
+  } : {
+    uid: session.user_id,
+    email: session.email,
+    display_name: session.email || 'User',
+    photoURL: null,
+    role: session.role as UserRole,
+  };
+
   // Merge users and pending invitations
   const allUsers = [...users, ...pendingInvitations];
 
@@ -98,69 +119,14 @@ export default async function UsersPage() {
 
   return (
     <RoleGuard allowedRoles={['owner', 'admin']} redirectTo="/unauthorized">
-      <div
-        className="container mx-auto"
-        style={{
-          padding: 'var(--spacing-lg)',
-          maxWidth: '1200px'
-        }}
-      >
-        {/* Page Header */}
-        <div style={{ marginBottom: 'var(--spacing-xl)' }}>
-          <h1
-            style={{
-              fontSize: '1.875rem',
-              fontWeight: '700',
-              marginBottom: 'var(--spacing-xs)',
-              color: 'hsl(var(--foreground))'
-            }}
-          >
-            User Management
-          </h1>
-          <p
-            style={{
-              fontSize: '0.875rem',
-              color: 'hsl(var(--muted-foreground))'
-            }}
-          >
-            Manage your team members, invite new users, and configure roles and permissions.
-          </p>
-        </div>
-
-        {/* Dashboard Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gap: 'var(--spacing-lg)',
-            gridTemplateColumns: '1fr'
-          }}
-        >
-          {/* Invite User Form */}
-          <InviteUserForm
-            currentUserRole={session.role as 'owner' | 'admin'}
-            tenantId={session.tenant_id}
-          />
-
-          {/* User List Table */}
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Team Members ({users.length} active{pendingInvitations.length > 0 ? `, ${pendingInvitations.length} pending` : ''})
-              </CardTitle>
-              <CardDescription>
-                View and manage all users and pending invitations in your organization
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <UserTable
-                users={sortedUsers}
-                currentUserRole={session.role as 'owner' | 'admin'}
-                currentUserId={session.user_id}
-              />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      <SettingsPageClient
+        currentUser={currentUser}
+        currentUserRole={session.role as 'owner' | 'admin'}
+        tenantId={session.tenant_id}
+        users={sortedUsers}
+        activeUsersCount={users.length}
+        pendingInvitationsCount={pendingInvitations.length}
+      />
     </RoleGuard>
   );
 }

@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { RoleBadge } from '@/components/users/RoleBadge';
 import { UserActionsMenu } from '@/components/users/UserActionsMenu';
+import { UserAvatar } from '@/components/users/UserAvatar';
 import type { User } from '@/types/user';
 import { getStatusBadgeVariant, getStatusDisplayText, getStatusIcon, isPendingInvitation } from '@/types/user';
 import { revokeInvitation } from '@/lib/actions/revoke-invitation';
@@ -87,6 +88,7 @@ export function UserTable({ users, currentUserRole, currentUserId }: UserTablePr
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-12"></TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
@@ -100,6 +102,18 @@ export function UserTable({ users, currentUserRole, currentUserId }: UserTablePr
 
             return (
               <TableRow key={user.uid}>
+                {/* Avatar */}
+                <TableCell>
+                  <UserAvatar
+                    user={{
+                      photoURL: null, // Pending invitations don't have photos
+                      display_name: user.display_name,
+                      email: user.email,
+                    }}
+                    size="sm"
+                  />
+                </TableCell>
+
                 {/* Name */}
                 <TableCell style={{ fontWeight: '500' }}>
                   {user.display_name}
